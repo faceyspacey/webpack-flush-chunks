@@ -1,0 +1,152 @@
+// Jest Snapshot v1, https://goo.gl/fbAQLP
+
+exports[`createApiWithCss() generates js + style components, strings and arrays 1`] = `
+<span
+  id="__javascript__"
+>
+  <script
+    src="/static/0.js"
+    type="text/javascript"
+  />
+  <script
+    src="/static/main.js"
+    type="text/javascript"
+  />
+</span>
+`;
+
+exports[`createApiWithCss() generates js + style components, strings and arrays 2`] = `
+<span
+  id="__styles__"
+>
+  <link
+    href="/static/0.css"
+    rel="stylesheet"
+  />
+  <link
+    href="/static/main.css"
+    rel="stylesheet"
+  />
+</span>
+`;
+
+exports[`createApiWithCss() generates js + style components, strings and arrays 3`] = `
+<span
+  id="__styles__"
+>
+  <style>
+    /Users/jamesgillmore/App/build/0.css- the css! 
+    
+    /Users/jamesgillmore/App/build/main.css- the css! 
+    
+  </style>
+</span>
+`;
+
+exports[`createApiWithCss() generates js + style components, strings and arrays 4`] = `
+"<span id='__javascript__'>
+          <script type='text/javascript' src='/static/0.js'></script>
+<script type='text/javascript' src='/static/main.js'></script>
+        </span>"
+`;
+
+exports[`createApiWithCss() generates js + style components, strings and arrays 5`] = `
+"<span id='__styles__'>
+          <link rel='stylesheet' href='/static/0.css' />
+<link rel='stylesheet' href='/static/main.css' />
+        </span>"
+`;
+
+exports[`createApiWithCss() generates js + style components, strings and arrays 6`] = `
+"<span id='__styles__'>
+          <style>/Users/jamesgillmore/App/build/0.css- the css! 
+
+/Users/jamesgillmore/App/build/main.css- the css! 
+</style>
+        </span>"
+`;
+
+exports[`createApiWithCss() generates js + style components, strings and arrays 7`] = `
+Array [
+  "0.js",
+  "main.js",
+]
+`;
+
+exports[`createApiWithCss() generates js + style components, strings and arrays 8`] = `
+Array [
+  "0.css",
+  "main.css",
+]
+`;
+
+exports[`createApiWithCss() uses files with extension "no_css.js" if available 1`] = `
+<span
+  id="__javascript__"
+>
+  <script
+    src="/static/main.no_css.js"
+    type="text/javascript"
+  />
+</span>
+`;
+
+exports[`createApiWithCss() uses files with extension "no_css.js" if available 2`] = `
+<span
+  id="__styles__"
+>
+  <link
+    href="/static/main.css"
+    rel="stylesheet"
+  />
+</span>
+`;
+
+exports[`createApiWithCss() uses files with extension "no_css.js" if available 3`] = `
+<span
+  id="__styles__"
+>
+  <style>
+    /Users/jamesgillmore/App/build/main.css- the css! 
+    
+  </style>
+</span>
+`;
+
+exports[`createApiWithCss() uses files with extension "no_css.js" if available 4`] = `
+"<span id='__javascript__'>
+          <script type='text/javascript' src='/static/main.no_css.js'></script>
+        </span>"
+`;
+
+exports[`createApiWithCss() uses files with extension "no_css.js" if available 5`] = `
+"<span id='__styles__'>
+          <link rel='stylesheet' href='/static/main.css' />
+        </span>"
+`;
+
+exports[`createApiWithCss() uses files with extension "no_css.js" if available 6`] = `
+"<span id='__styles__'>
+          <style>/Users/jamesgillmore/App/build/main.css- the css! 
+</style>
+        </span>"
+`;
+
+exports[`createApiWithCss() uses files with extension "no_css.js" if available 7`] = `
+Array [
+  "main.no_css.js",
+]
+`;
+
+exports[`createApiWithCss() uses files with extension "no_css.js" if available 8`] = `
+Array [
+  "main.css",
+]
+`;
+
+exports[`stylesAsString() 1`] = `
+"/Users/jamesgillmore/App/build/main.css- the css! 
+
+/Users/jamesgillmore/App/build/0.css- the css! 
+"
+`;
