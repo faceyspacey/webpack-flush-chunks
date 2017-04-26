@@ -1,4 +1,6 @@
 # webpack-flush-chunks
+
+[![Greenkeeper badge](https://badges.greenkeeper.io/faceyspacey/webpack-flush-chunks.svg)](https://greenkeeper.io/)
 `flushChunks` is the equivalent of `renderToString` or `renderToStaticMarkup` when it comes to code-splitting. It's to be used in
 server-rendering to extract the minimal amount of chunks to send to the client, thereby solving a missing piece for code-splitting:
 server-side rendering. 
