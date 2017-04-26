@@ -88,8 +88,8 @@ export default (
       (DEV
         ? api.Styles()
         : <span id='__styles__'>
-            <style>{stylesAsString(stylesheets, outputPath)}</style>
-          </span>),
+          <style>{stylesAsString(stylesheets, outputPath)}</style>
+        </span>),
     css: {
       toString: () =>
         // lazy-loaded in case not used
@@ -141,7 +141,7 @@ const stylesAsString = (
   return stylesheets
     .map(file => {
       const filePath = `${path}/${file}`
-      return require('fs').readFileSync(filePath, 'utf8')
+      return fs.readFileSync(filePath, 'utf8')
     })
     .join('\n')
     .replace(/\/\*# sourceMappingURL=.+\*\//g, '') // hide prod sourcemap err

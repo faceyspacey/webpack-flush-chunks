@@ -2,6 +2,7 @@
 import type { Api } from './createApiWithCss'
 import createApiWithCss from './createApiWithCss'
 
+declare function __webpack_require__(pathOrId: string): any
 
 type FilesMap = {
   [key: string]: Array<string>
@@ -35,7 +36,6 @@ type Files = Array<string>
 let filesByPath = null
 let filesByModuleId = null
 
-const DEV = process.env.NODE_ENV === 'development'
 const IS_WEBPACK = typeof __webpack_require__ !== 'undefined'
 const IS_TEST = process.env.NODE_ENV === 'test'
 const defaults = {
@@ -137,15 +137,16 @@ const isUnique = (v: string, i: number, self: Files): boolean =>
   self.indexOf(v) === i
 
 const normalizePath = (path: string, rootDir: string): string =>
-  path.replace(rootDir, '.').replace(/\.js$/, '') + '.js'
+  `${path.replace(rootDir, '.').replace(/\.js$/, '')}.js`
 
 const concatFilesAtKeys = (
   inputFilesMap: FilesMap,
   pathsOrIdsOrChunks: Array<any>
 ): Files =>
-  pathsOrIdsOrChunks.reduce((files, key) => {
-    return files.concat(inputFilesMap[key] || [])
-  }, [])
+  pathsOrIdsOrChunks.reduce(
+    (files, key) => files.concat(inputFilesMap[key] || []),
+    []
+  )
 
 const resolveEntryFiles = (
   entryNames: Files,

@@ -1,0 +1,13 @@
+language: node_js
+cache: yarn
+notifications:
+  email: false
+node_js:
+  - stable
+#script:
+  #- node_modules/.bin/travis-github-status lint flow jest
+after_success:
+  - yarn run semantic-release
+branches:
+  except:
+    - /^v\d+\.\d+\.\d+$/

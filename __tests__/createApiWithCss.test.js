@@ -1,5 +1,4 @@
 // @noflow
-import React from 'react'
 import {
   default as createApiWithCss,
   getJsFileRegex,
@@ -9,9 +8,8 @@ import {
 } from '../src/createApiWithCss'
 
 jest.mock('fs', () => ({
-  readFileSync: fileName => {
-    return fileName + '- the css! \n/*# sourceMappingURL=/static/main.js.map */'
-  }
+  readFileSync: fileName =>
+    fileName + '- the css! \n/*# sourceMappingURL=/static/main.js.map */'
 }))
 
 const publicPath = '/static/'

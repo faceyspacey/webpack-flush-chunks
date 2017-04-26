@@ -18,7 +18,7 @@ Optionally to generate multiple CSS files for each chunk (with HMR!) install:
 yarn add --dev extract-css-chunks-webpack-plugin
 ```
 
-**Extract CSS Chunk** is another companion package made to complete the CSS side of the code-splitting dream. To learn more visit: [faceyspacey/extract-css-chunks-webpack-plugin](https://github.com/faceyspacey/extract-css-chunks-webpack-plugin)
+***Extract CSS Chunk*** is another companion package made to complete the CSS side of the code-splitting dream. To learn more visit: [faceyspacey/extract-css-chunks-webpack-plugin](https://github.com/faceyspacey/extract-css-chunks-webpack-plugin)
 
 *...if you like to move fast, feel free to simply clone & run the [boilerplate](https://github.com/faceyspacey/flush-chunks-boilerplate).*
 
@@ -28,10 +28,10 @@ React can syncronously render itself in one go on the server. However, to do so 
 which obviously is different for each unique URL, authenticated user, etc. While additional asynchcronous requests triggered as the user 
 navigates your app is what code-splitting is all about, it's sub-optimal to have to load additional chunks in the initial render. Similarly, you 
 don't want to just send all the chunks down to the client for that initial request, as that defeats the purpose of *code-splitting.* In additition, 
-if your strategy is the former, checksums won't match and an additional unnecessary render will happen on the client.
+if your strategy is the former, *checksums* won't match and an additional unnecessary render will happen on the client.
 
 As a result, the goal becomes to get to the client precisely those chunks used in the first render, no more, no less. `flushChunks` does exactly 
-this, providing strings you can embed in your response.
+this, providing strings you can embed in your response:
 
 ```javascript
 const app = ReactDOM.renderToString(<App />)
@@ -76,8 +76,8 @@ Before we examine how to use `flushChunks`, let's take a look at the desired out
 </body>
 ```
 
-*Notice common `vendor` and `bootstrap` chunks at the beginning and your main entry bundle (`main`) at the end. 
-Notice that chunks `0` and `7` are served, but not chunks `1-6`. That's a lot of bytes saved in initial requests!*
+> Notice common `vendor` and `bootstrap` chunks at the beginning and your main entry bundle (`main`) at the end. 
+Notice that chunks `0` and `7` are served, but not chunks `1-6`. That's a lot of bytes saved in initial requests!
 
 Because of the way Webpack works where "bootstrap" code must be run before any additional chunks can be registered, 
 it's imperative bootstrap and common chunks are generated and placed at the beginning, 
@@ -87,7 +87,7 @@ In conjunction with your Webpack configuration (which we'll specify below), `flu
 
 ## Usage
 
-Call `ReactLoadable.flushRequires` immediately after `ReactDOM.renderToString` or `ReactDOM.renderToStaticMarkup`, and then pass the returned `moduleIds` plus your Webpack client bundle's 
+Call `ReactLoadable.flushRequires` immediately after `ReactDOM.renderToString`, and then pass the returned `moduleIds` plus your Webpack client bundle's 
 compilation stats to `flushChunks`. The return object of `flushChunks` will provide several options you can embed in your response string. The easiest is the `js` and `styles` strings: 
 
 ```javascript
@@ -128,9 +128,9 @@ flushChunks(moduleIds, stats, {
 })
 ```
 
-**All options are optional** if you are rendering both your client and server with webpack and using the default 
-names for entry chunks. If you're rendering the server with Babel, only `rootDir` is required. Here are all possible
-options:
+**All options are optional** if you are rendering *both your client and server with webpack* and using the *default 
+names* for entry chunks. If you're rendering the server with Babel (and using the default entry names), only `rootDir` 
+is required. Here are all possible options:
 
 - **before** - ***array of named entries that come BEFORE your dynamic chunks:*** A typical 
 pattern is to create a `vendor` chunk. A better strategy is to create a `vendor` and a `bootstrap` chunk. The "bootstrap"
@@ -138,7 +138,7 @@ chunk is a name provided to the `CommonsChunkPlugin` which has no entry point sp
 webpack bootstrap code from the named `vendor` common chunk and puts it in the `bootstrap` chunk. This is a common pattern because
 the webpack bootstrap code has info about all the chunks/modules used in your bundle and is likely to change, which means to cache
 your `vendor` chunk you need to extract the bootstrap code into its own small chunk file. If this is new to you, don't worry.
-[Below](http://www.faceyspacey.com) you will find examples for exactly how to specify your Webpack config. Lastly, you do not need to 
+[Below](#webpack-configuration) you will find examples for exactly how to specify your Webpack config. Lastly, you do not need to 
 provide this option if you have a `bootstrap` chunk, or `vendor` chunk or both, as those are the defaults.
 
 - **after** - ***array of named entries that come AFTER your dynamic chunks:*** 
@@ -153,12 +153,13 @@ client entry script is `app/src/index.js`, and you're calling `flushChunks` from
 to pass `path.resolve(__dirname, '..')`, which is essentially `app/`. We recommend you checkout and run the 
 [boilerplate]() for a clear example.
 
-- **outputPath** - ***absolute path to the directory containing your client build:*** This is only needed if serving css embedded in your served response HTML, rather than links to
-external stylesheets. It's needed to determine where in the file system to find the CSS that needs to be extract into
+- **outputPath** - ***absolute path to the directory containing your client build:*** This is only needed if serving css 
+embedded in your served response HTML, rather than links to external stylesheets. *See [below](#3-css-instead-of-stylesheets) 
+for how to do this.* It's needed to determine where in the file system to find the CSS that needs to be extract into
 an in-memory string. Keep in mind if you're rendering the server with Webpack, filesystem paths may not match up, so it's important
 to accurately pass the `outputPath` to your `serverRender` method. We recommend to do this by running your server 
 express/koa/hapi/etc code via Babel and then by requiring your Webpack server bundle into it. 
-See our [boilerplate](https:github.com/thejameskyle/react-loadable-example) for an example.
+See the [boilerplate](https:github.com/faceyspacey/flush-chunks-boilerplate) for an example.
 
 
 ## Return API:
@@ -184,7 +185,7 @@ const {
   // important paths:
   publicPath,
   outputPath
-} = Loadable.flushChunks(stats...
+} = flushChunks(moduleIds, stats, options)
 ```
 
 Let's take a look at some examples:
@@ -192,7 +193,6 @@ Let's take a look at some examples:
 
 ## 1) Generated \<Js /\> + \<Styles /\> components:
 ```javascript
-import path from 'path'
 import React from 'react'
 import ReactDOM from 'react-dom/server'
 import ReactLoadable from 'react-loadable'
@@ -247,7 +247,7 @@ res.send(`
   </html>
 `)
 ```
-*notice here how no options map was passed to `flushChunks`. That's because the named entry chunks, `bootstrap`, `vendor` and `main`, are looked for by default.*
+> **note:** notice how no options map was passed to `flushChunks`. That's because the named entry chunks, `bootstrap`, `vendor` and `main`, are looked for by default.
 
 
 ## 3) CSS instead of Stylesheets:
@@ -269,7 +269,7 @@ res.send(`
   </html>
 `)
 ```
-*And of course, `<Css />` is available as well if composing another React component tree.*
+> **note:** `<Css />` is available as well if composing another React component tree.
 
 
 Here the raw css will be inserted into the page, rather than links to external stylesheets. 
@@ -303,7 +303,7 @@ const html = ReactDOM.renderToStaticMarkup(
   </html>
 )
 ```
-*note: the `publicPath` is also returned, for convenience*
+> **note:** the `publicPath` is also returned, for convenience
 
 Though you will have no need to manually create your stylesheets and scripts, here you can see what data you have available to you in case you need to perform some other logic
 on the array of scripts/sheets returned to you.
@@ -455,6 +455,7 @@ becomes:
 ```html
 <div class="../css/Foo__box--asdfe" />
 ```
+*And it does so without creating CSS files, as that's handled by Webpack bundling the client code.*
 
 Now that we are using this babel transform, pay close attention to how we must override its `.babelrc` in your client webpack config:
 
@@ -522,6 +523,7 @@ plugins: [
 The general premise is to run your webpack compiler in code rather than from the command line. By doing so,
 you get access to your client bundle's stats in a callback:
 
+*server/index.js:*
 ```javascript
 import serverRender from './render'
 
@@ -535,23 +537,25 @@ compiler.plugin('done', stats => {
   app.use(serverRender(stats.toJson()))
 })  
 ```
-*note: a callback can be passed to `webpack(config, stats => ...)`, but it does not provide the complete set 
+> **note:** a callback can be passed to `webpack(config, stats => ...)`, but it does not provide the complete set 
 of stats as the `done` plugin callback does. Do NOT use it!*
 
 In this case `serverRender` is a function you call once with the stats that returns a function that 
 can be used by express on every request:
 
-*serverRender.js:*
+*server/render.js:*
 ```javascript
 export default stats => {
   return (req, res, next) => {
     const app = ReactDOM.renderToString(<App />)
     const moduleIds = ReactLoadable.flushRequires()
-    const { Js Styles} = flushChunks(moduleIds, stats)
+    const { Js Styles} = flushChunks(moduleIds, stats, {
+      rootDir: path.resolve(__dirname, '..')
+    })
     ...
 ```
 
-*NOTE: the above is an example with a babel server. Checkout the [boilerplate](https://github.com/faceyspacey/flush-chunks-boilerplate) to
+*The above is an example with a Babel server (hence the `rootDir` option). Checkout the [boilerplate](https://github.com/faceyspacey/flush-chunks-boilerplate) to
 see it in its entirety, as well as a unique solution we recommend for universal webpack rendering, using `webpack-hot-server-middleware` 
 which bundles both the client and the server using a shared cache for faster builds.*
 
@@ -562,7 +566,7 @@ webpack configs. It's therefore extremely important to checkout the [example boi
 After clicking around its files, and running the different setups (development, production, babel server), the above should all make sense,
 and you should have a fool-proof place to start from.
 
-ONE FINAL TIME: try out [the flush chunks boilerplate](https://github.com/faceyspacey/flush-chunks-boilerplate) before using this package!
+ONE FINAL TIME: clone & run [the flush chunks boilerplate](https://github.com/faceyspacey/flush-chunks-boilerplate) before using this package!
 
 ## Notes on `extract-css-chunks-webpack-plugin`
 

@@ -16,7 +16,7 @@ import {
   rootDir,
   babelFilePaths,
   webpackModuleIds
-} from '../__fixtures__/stats.js'
+} from '../__fixtures__/stats'
 
 /** FLUSH RENDERED */
 
