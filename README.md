@@ -621,3 +621,7 @@ doesn't add to your runtime/render-overhead by performing work during render;** 
 think we may have stumbled upon a solution that completes the intent of CSS Modules and the value you can derive from it, similar to how *Webpack Flush Chunks* completes the thought of code-splitting for *React Loadable*. It certainly produces the most minimal set of bytes corresponding to CSS
 you'll send over the wire in initial requests. You be the judge of that. We look forward to hearing your
 opinion.
+
+
+## Contributing
+We use [commitizen](https://github.com/commitizen/cz-cli), so run `npm run commit` to make commits. A command-line form will appear, requiring you answer a few questions to automatically produce a nicely formatted commit. Releases, semantic version numbers, tags and changelogs will automatically be generated based on these commits thanks to [semantic-release](https://github.com/semantic-release/semantic-release).
