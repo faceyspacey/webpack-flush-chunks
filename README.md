@@ -1,4 +1,6 @@
 # webpack-flush-chunks
+
+[![Join the chat at https://gitter.im/webpack-flush-chunks/Lobby](https://badges.gitter.im/webpack-flush-chunks/Lobby.svg)](https://gitter.im/webpack-flush-chunks/Lobby?utm_source=badge&utm_medium=badge&utm_campaign=pr-badge&utm_content=badge)
 `flushChunks` is the equivalent of `renderToString` or `renderToStaticMarkup` when it comes to code-splitting. It's to be used in
 server-rendering to extract the minimal amount of chunks to send to the client, thereby solving a missing piece for code-splitting:
 server-side rendering. 
