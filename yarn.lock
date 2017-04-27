@@ -2248,7 +2248,7 @@ github@^0.2.4:
   dependencies:
     mime "^1.2.11"
 
-github@^9.1.0:
+github@^9.2.0:
   version "9.2.0"
   resolved "https://registry.yarnpkg.com/github/-/github-9.2.0.tgz#8a886dc40dd63636707dcaf99df3df26c59f16fc"
   dependencies:
@@ -3205,9 +3205,9 @@ levn@^0.3.0, levn@~0.3.0:
     prelude-ls "~1.1.2"
     type-check "~0.3.2"
 
-lint-staged@^3.3.1:
-  version "3.3.1"
-  resolved "https://registry.yarnpkg.com/lint-staged/-/lint-staged-3.3.1.tgz#b725d98a2be1f82cb228069fab682f503c95234d"
+lint-staged@^3.4.0:
+  version "3.4.0"
+  resolved "https://registry.yarnpkg.com/lint-staged/-/lint-staged-3.4.0.tgz#52fa85dfc92bb1c6fe8ad0d0d98ca13924e03e4b"
   dependencies:
     app-root-path "^2.0.0"
     cosmiconfig "^1.1.0"
@@ -3216,7 +3216,6 @@ lint-staged@^3.3.1:
     minimatch "^3.0.0"
     npm-which "^3.0.1"
     staged-git-files "0.0.4"
-    which "^1.2.11"
 
 listr-silent-renderer@^1.1.1:
   version "1.1.1"
@@ -4636,7 +4635,7 @@ snyk-try-require@^1.1.1, snyk-try-require@^1.2.0:
     lru-cache "^4.0.0"
     then-fs "^2.0.0"
 
-snyk@^1.25.2:
+snyk@^1.29.0:
   version "1.29.0"
   resolved "https://registry.yarnpkg.com/snyk/-/snyk-1.29.0.tgz#20be4eaddc9641ca004fb24368dc33d6f82d17dc"
   dependencies:
@@ -4956,14 +4955,14 @@ travis-deploy-once@1.0.0-node-0.10-support:
     request-promise "^4.1.1"
     travis-ci "^2.1.1"
 
-travis-github-status@^1.3.0:
-  version "1.3.0"
-  resolved "https://registry.yarnpkg.com/travis-github-status/-/travis-github-status-1.3.0.tgz#b903034c1ac2f35d4b229ae66a41e5d7765ff46f"
+travis-github-status@^1.4.0:
+  version "1.4.0"
+  resolved "https://registry.yarnpkg.com/travis-github-status/-/travis-github-status-1.4.0.tgz#4282e9edfc3eec81eee6c285568f30e23b89e12e"
   dependencies:
     codeclimate-test-reporter "^0.4.1"
     colors "^1.1.2"
-    github "^9.1.0"
-    snyk "^1.25.2"
+    github "^9.2.0"
+    snyk "^1.29.0"
 
 trim-newlines@^1.0.0:
   version "1.0.0"
@@ -5159,7 +5158,7 @@ which-module@^1.0.0:
   version "1.0.0"
   resolved "https://registry.yarnpkg.com/which-module/-/which-module-1.0.0.tgz#bba63ca861948994ff307736089e3b96026c2a4f"
 
-which@^1.1.1, which@^1.2.10, which@^1.2.11, which@^1.2.12, which@^1.2.9:
+which@^1.1.1, which@^1.2.10, which@^1.2.12, which@^1.2.9:
   version "1.2.12"
   resolved "https://registry.yarnpkg.com/which/-/which-1.2.12.tgz#de67b5e450269f194909ef23ece4ebe416fa1192"
   dependencies:

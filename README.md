@@ -1,3 +1,37 @@
+<p align="center">
+  <a href="https://www.npmjs.com/package/webpack-flush-chunks">
+    <img src="https://img.shields.io/npm/v/webpack-flush-chunks.svg" alt="Version" />
+  </a>
+
+  <a href="https://travis-ci.org/faceyspacey/webpack-flush-chunks">
+    <img src="https://travis-ci.org/faceyspacey/webpack-flush-chunks.svg?branch=master" alt="Build Status" />
+  </a>
+
+  <a href="https://lima.codeclimate.com/github/faceyspacey/webpack-flush-chunks/coverage">
+    <img src="https://lima.codeclimate.com/github/faceyspacey/webpack-flush-chunks/badges/coverage.svg" alt="Coverage Status"/>
+  </a>
+
+  <a href="https://greenkeeper.io">
+    <img src="https://badges.greenkeeper.io/faceyspacey/webpack-flush-chunks.svg" alt="Green Keeper" />
+  </a>
+
+  <a href="https://lima.codeclimate.com/github/faceyspacey/webpack-flush-chunks">
+    <img src="https://lima.codeclimate.com/github/faceyspacey/webpack-flush-chunks/badges/gpa.svg" alt="GPA" />
+  </a>
+
+  <a href="https://www.npmjs.com/package/webpack-flush-chunks">
+    <img src="https://img.shields.io/npm/dt/webpack-flush-chunks.svg" alt="Downloads" />
+  </a>
+
+  <a href="https://www.npmjs.com/package/webpack-flush-chunks">
+    <img src="https://img.shields.io/npm/l/webpack-flush-chunks.svg" alt="License" />
+  </a>
+
+  <a href="https://gitter.im/webpack-flush-chunks">
+    <img src="https://img.shields.io/gitter/room/nwjs/nw.js.svg" alt="Gitter Chat" />
+  </a>
+</p>
+
 # webpack-flush-chunks
 `flushChunks` is the equivalent of `renderToString` or `renderToStaticMarkup` when it comes to code-splitting. It's to be used in
 server-rendering to extract the minimal amount of chunks to send to the client, thereby solving a missing piece for code-splitting:
@@ -31,14 +65,15 @@ don't want to just send all the chunks down to the client for that initial reque
 if your strategy is the former, *checksums* won't match and an additional unnecessary render will happen on the client.
 
 As a result, the goal becomes to get to the client precisely those chunks used in the first render, no more, no less. `flushChunks` does exactly 
-this, providing strings you can embed in your response:
+this, providing strings containing those scripts and stylesheets you can embed in your response:
 
 ```javascript
 const app = ReactDOM.renderToString(<App />)
-const { js, styles } = flushChunks(stats)
+const moduleIds = ReactLoadable.flushRequires()
+const { js, styles } = flushChunks(moduleIds, stats)
 ```
 
-If you can provide these chunks to the client, *React Lodable* will perform the first render synchcronously just like the server.
+If you can provide these chunks to the client, *React Lodable* (or comparable) will perform the first render synchcronously just like the server.
 
 ## How It Works
 *React Loadable*, when used on the server, skips the *loading* phase and syncronously renders your contained component, while recording the ID of 
@@ -224,8 +259,7 @@ export default function render(stats) {
 }
 ```
 
-Here the React Components `<JS />` and `<Styles />` are returned from `flushChunks` for use in composing the final component tree passed to `renderToStaticMarkup`. 
-Notice the components are in the `<body>`--this is because until *React 16* container `spans` are needed, and if used in the `<head>` will produce warnings.
+> Here the React Components `<JS />` and `<Styles />` are returned from `flushChunks` for use in composing the final component tree passed to `renderToStaticMarkup`. Notice the components are in the `<body>`--this is because until *React 16* container `spans` are needed, and if used in the `<head>` will produce warnings.
 
 This is just one option though. There are several other things **returned** from `flushChunks`, which fulfill most other common needs:
 
@@ -305,7 +339,7 @@ const html = ReactDOM.renderToStaticMarkup(
 ```
 > **note:** the `publicPath` is also returned, for convenience
 
-Though you will have no need to manually create your stylesheets and scripts, here you can see what data you have available to you in case you need to perform some other logic
+Though generally you will have no need to manually create your stylesheets and scripts, here you can see what data you have available to you in case you need to perform some other logic
 on the array of scripts/sheets returned to you.
 
 
@@ -353,7 +387,7 @@ plugins: [
 
 The key elements above are first the `namedModulesPlugin` which insures the module IDs generated for your
 client bundle are the same for your server bundle (aka "deterministic"). Secondly, the `CommonsChunkPlugin` with
-`"bootstrap"` entry which doesn't exist insures that a separate chunk is created just for webpack bootstrap code. 
+`"bootstrap"` entry *which doesn't exist* insures that a separate chunk is created just for webpack bootstrap code. 
 This moves the webpack bootstrap code out of your `main` entry chunk so that it can also run before your dynamic
 chunks. Lastly, the `ExtractCssChunks` plugin in combination with its loader insures CSS also gets multiple
 CSS files created. If you're familiar with how `extract-text-webpack-plugin` works, you will be right at home.
@@ -361,7 +395,8 @@ CSS files created. If you're familiar with how `extract-text-webpack-plugin` wor
 
 Check out [faceyspacey/extract-css-chunks-webpack-plugin](https://github.com/faceyspacey/extract-css-chunks-webpack-plugin) 
 to learn more--it has some advanced features including HMR, and the ability to generate javascript chunks that don't 
-contain CSS injection plus simultaneously chunks that do for future asynchronous loading of chunks.
+contain CSS injection plus simultaneously chunks that do for future asynchronous loading of chunks. I.e. 2 versions
+of each javascript chunk.
 
 ### Server Development
 ```javascript
@@ -538,7 +573,7 @@ compiler.plugin('done', stats => {
 })  
 ```
 > **note:** a callback can be passed to `webpack(config, stats => ...)`, but it does not provide the complete set 
-of stats as the `done` plugin callback does. Do NOT use it!*
+of stats as the `done` plugin callback does. Do NOT use it!
 
 In this case `serverRender` is a function you call once with the stats that returns a function that 
 can be used by express on every request:
@@ -581,8 +616,8 @@ its forked from (`extract-text-webpack-plugin`) does not provide, not even for a
 
 In terms of server-rendering, it achieves a lot of the same things that solutions like *Aphrodite*
 and *StyleTron* achieve where you extract the rendered CSS, *except its JS bundles are a lot smaller since CSS is completely moved to CSS files;* **and it 
-doesn't add to your runtime/render-overhead by performing work during render;** ***and it doesn't require cluttering your code with HoCs or specialized components.*** 
+doesn't add to your runtime/render-overhead by performing work during render;** ***and it doesn't require cluttering your code with HoCs or specialized components; you can import a styles object just like you can with React Native (therefore you can use the same components for React as RN)*** 
 *The list goes on...* We
-think we may have stumbled upon a solution that completes the intent of CSS Modules and value you can derive from it similar to how *Webpack Flush Chunks* completes the thought of code-splitting for *React Loadable*. It certainly produces the most minimal set of bytes corresponding to CSS
+think we may have stumbled upon a solution that completes the intent of CSS Modules and the value you can derive from it, similar to how *Webpack Flush Chunks* completes the thought of code-splitting for *React Loadable*. It certainly produces the most minimal set of bytes corresponding to CSS
 you'll send over the wire in initial requests. You be the judge of that. We look forward to hearing your
 opinion.
