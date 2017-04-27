@@ -56,19 +56,19 @@ describe('flushChunks() called as pure function', () => {
 /** BABEL VS. WEBPACK FLUSHING */
 
 test('flushBabel()', () => {
-  const files = flushBabel(stats, babelFilePaths, rootDir) /*? */
+  const files = flushBabel(babelFilePaths, stats, rootDir) /*? */
   const allFiles = stats.chunks[0].files.concat(stats.chunks[1].files)
   expect(files).toEqual(allFiles)
 })
 
 test('flushWebpack()', () => {
-  const files = flushWebpack(stats, webpackModuleIds) /*? */
+  const files = flushWebpack(webpackModuleIds, stats) /*? */
   const allFiles = stats.chunks[0].files.concat(stats.chunks[1].files)
   expect(files).toEqual(allFiles)
 })
 
 test('flushBabel() throws with no rootDir argument', () => {
-  const flush = () => flushBabel(stats, babelFilePaths) /*? */
+  const flush = () => flushBabel(babelFilePaths, stats) /*? */
   expect(flush).toThrow()
 })
 
@@ -94,8 +94,8 @@ test('createFilesByModuleId()', () => {
 
   expect(Object.keys(filesByPath)).toEqual(webpackModuleIds)
 
-  expect(filesByPath['qwer']).toEqual(['0.js', '0.no_css.js', '0.css'])
-  expect(filesByPath['zxcv']).toEqual([]) // test against arrays of undefined
+  expect(filesByPath.qwer).toEqual(['0.js', '0.no_css.js', '0.css'])
+  expect(filesByPath.zxcv).toEqual([]) // test against arrays of undefined
 
   expect(filesByPath).toMatchSnapshot()
 })

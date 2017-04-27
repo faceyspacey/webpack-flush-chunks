@@ -57,8 +57,8 @@ const flushChunks = (
   const beforeEntries = opts.before || defaults.before
 
   const files = !isWebpack
-    ? flushBabel(stats, pathsOrIds, opts.rootDir)
-    : flushWebpack(stats, pathsOrIds)
+    ? flushBabel(pathsOrIds, stats, opts.rootDir)
+    : flushWebpack(pathsOrIds, stats)
 
   const afterEntries = opts.after || defaults.after
 
@@ -75,7 +75,7 @@ const flushChunks = (
 
 /** BABEL VS. WEBPACK FLUSHING */
 
-const flushBabel = (stats: Stats, paths: Files, rootDir: ?string): Files => {
+const flushBabel = (paths: Files, stats: Stats, rootDir: ?string): Files => {
   if (!rootDir) {
     throw new Error(
       `No \`rootDir\` was provided as an option to \`flushChunks\`.
@@ -94,7 +94,7 @@ const flushBabel = (stats: Stats, paths: Files, rootDir: ?string): Files => {
   return concatFilesAtKeys(filesByPath, paths.map(p => normalizePath(p, dir)))
 }
 
-const flushWebpack = (stats: Stats, ids: Files): Files => {
+const flushWebpack = (ids: Files, stats: Stats): Files => {
   filesByModuleId = filesByModuleId && !IS_TEST
     ? filesByModuleId // cached
     : createFilesByModuleId(stats)
