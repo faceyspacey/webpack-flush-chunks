@@ -562,9 +562,11 @@ you get access to your client bundle's stats in a callback:
 
 *server/index.js:*
 ```javascript
+import config from '../webpack/client.dev'
 import serverRender from './render'
 
 const compiler = webpack(config)
+const publicPath = config.output.publicPath
 
 app.use(webpackDevMiddleware(compiler, { publicPath }))
 app.use(webpackHotMiddleware(compiler))
@@ -593,14 +595,13 @@ export default stats => {
 ```
 
 *The above is an example with a Babel server (hence the `rootDir` option). Checkout the [boilerplate](https://github.com/faceyspacey/flush-chunks-boilerplate) to
-see it in its entirety, as well as a unique solution we recommend for universal webpack rendering, using `webpack-hot-server-middleware` 
-which bundles both the client and the server using a shared cache for faster builds.*
+see it in its entirety, as well as a unique solution we recommend for universal webpack rendering, using [webpack-hot-server-middleware](https://github.com/60frames/webpack-hot-server-middleware) which bundles both the client and the server using a shared cache for faster builds.*
 
 
 ## Boilerplate Example
 It should be clear by now that the main work in using `webpack-flush-chunks` is not in application code, but in setting up your
 webpack configs. It's therefore extremely important to checkout the [example boilerplate](https://github.com/faceyspacey/flush-chunks-boilerplate). 
-After clicking around its files, and running the different setups (development, production, babel server), the above should all make sense,
+After clicking around its files, and running the different setups (development, production, babel server, etc), the above should all make sense,
 and you should have a fool-proof place to start from.
 
 ONE FINAL TIME: clone & run [the flush chunks boilerplate](https://github.com/faceyspacey/flush-chunks-boilerplate) before using this package!
@@ -608,17 +609,17 @@ ONE FINAL TIME: clone & run [the flush chunks boilerplate](https://github.com/fa
 ## Notes on `extract-css-chunks-webpack-plugin`
 
 In all of the configurations above you may have noticed our focus on CSS plus the `ExtractCssChunks` plugin. This is a very important package that allows you to
-serve rendered CSS chunks just as we do javascript chunks. In fact, it's a sister package we specifically made to achieve the dream of server-rendered
+serve rendered CSS chunks just as we do javascript chunks. In fact, it's a companion package we specifically made to achieve the dream of server-rendered
 code-splitting with *React Loadable* + *Webpack Flush Chunks*. We recommend you check out its [documentation](https://github.com/faceyspacey/extract-css-chunks-webpack-plugin) to learn all about it. 
 
 The short of it is that we remove CSS from your javascript chunks to make it smaller, and move it all into CSS chunk files which `flushChunks` 
 handles the same as js, *EXCEPT when you require additional chunks asyncronously on the client after the initial page load, in which case different 
-chunks are loaded which inject css as normal*. It also successfully provides HMR features across all your CSS chunks--something the original package
+chunks are loaded which inject css as normal*. Woo, that was a long sentence! It also successfully provides HMR features across all your CSS chunks--something the original package
 its forked from (`extract-text-webpack-plugin`) does not provide, not even for a single css file.
 
 In terms of server-rendering, it achieves a lot of the same things that solutions like *Aphrodite*
 and *StyleTron* achieve where you extract the rendered CSS, *except its JS bundles are a lot smaller since CSS is completely moved to CSS files;* **and it 
-doesn't add to your runtime/render-overhead by performing work during render;** ***and it doesn't require cluttering your code with HoCs or specialized components; you can import a styles object just like you can with React Native (therefore you can use the same components for React as RN)*** 
+doesn't add to your runtime/render-overhead by performing work during render;** ***and it doesn't require cluttering your code with HoCs or specialized components; you can import a styles object just like you can with React Native (therefore you can use the same components for React as RN).*** 
 *The list goes on...* We
 think we may have stumbled upon a solution that completes the intent of CSS Modules and the value you can derive from it, similar to how *Webpack Flush Chunks* completes the thought of code-splitting for *React Loadable*. It certainly produces the most minimal set of bytes corresponding to CSS
 you'll send over the wire in initial requests. You be the judge of that. We look forward to hearing your
@@ -626,4 +627,4 @@ opinion.
 
 
 ## Contributing
-We use [commitizen](https://github.com/commitizen/cz-cli), so run `npm run commit` to make commits. A command-line form will appear, requiring you answer a few questions to automatically produce a nicely formatted commit. Releases, semantic version numbers, tags and changelogs will automatically be generated based on these commits thanks to [semantic-release](https://github.com/semantic-release/semantic-release).
+We use [commitizen](https://github.com/commitizen/cz-cli), so run `npm run commit` to make commits. A command-line form will appear, requiring you answer a few questions to automatically produce a nicely formatted commit. Releases, semantic version numbers, tags and changelogs will automatically be generated based on these commits thanks to [semantic-release](https://github.com/semantic-release/semantic-release). Be good.
