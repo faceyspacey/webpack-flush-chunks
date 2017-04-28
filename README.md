@@ -356,6 +356,8 @@ In addition to providing a plethora of options for rendering server-side request
 
 ### Client Development
 ```javascript
+const ExtractCssChunks = require('extract-css-chunks-webpack-plugin')
+
 entry: [
   path.resolve(__dirname, '../src/index.js'),
 ],
@@ -375,10 +377,10 @@ module: {
   ],
 },
 plugins: [
-  require('extract-css-chunks-webpack-plugin'), // key to producing CSS chunks -- see below!
-  new webpack.NamedModulesPlugin(),             // key to linking server modules to client modules
+  new ExtractCssChunks,                      // key to producing CSS chunks -- see below!
+  new webpack.NamedModulesPlugin(),         // key to linking server modules to client modules
   new webpack.optimize.CommonsChunkPlugin({
-    names: ['bootstrap'],                        // notice there is no "bootstrap" named entry
+    names: ['bootstrap'],                   // notice there is no "bootstrap" named entry
     filename: '[name].js',
     minChunks: Infinity,
   }),
@@ -430,7 +432,7 @@ as your client bundle are flushed.
 ```javascript
 // loaders + entries stay the same
 plugins: [
-  new require('extract-css-chunks-webpack-plugin'),
+  new ExtractCssChunks,
   new webpack.HashedModuleIdsPlugin(),                // don't expose file system in production bundle
   new webpack.optimize.CommonsChunkPlugin({
     names: ['bootstrap'],
@@ -528,7 +530,7 @@ module: {
   ],
 },
 plugins: [
-  new ExtractCssChunks(),
+  new ExtractCssChunks,
   new webpack.optimize.CommonsChunkPlugin({
     names: ['bootstrap'],
     filename: '[name].js',
@@ -541,7 +543,7 @@ plugins: [
 ```javascript
 // loaders + entries stay the same
 plugins: [
-  new ExtractCssChunks(),
+  new ExtractCssChunks,
   new webpack.optimize.CommonsChunkPlugin({
     names: ['bootstrap'],
     filename: '[name].[chunkhash].js',
