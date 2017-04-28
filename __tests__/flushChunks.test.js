@@ -18,7 +18,7 @@ import {
   webpackModuleIds
 } from '../__fixtures__/stats'
 
-/** FLUSH RENDERED */
+/** FLUSH CHUNKS */
 
 describe('flushChunks() called as pure function', () => {
   it('babel: uses default entries when no named chunks provided via opts.before/after', () => {

@@ -43,7 +43,7 @@ const defaults = {
   after: ['main']
 }
 
-/** FLUSH RENDERED */
+/** FLUSH CHUNKS */
 
 export default (pathsOrIds: Files, stats: Stats, opts?: Options): Api =>
   flushChunks(pathsOrIds, stats, IS_WEBPACK, opts)
