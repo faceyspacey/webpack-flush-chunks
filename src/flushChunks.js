@@ -43,7 +43,7 @@ const defaults = {
   after: ['main']
 }
 
-/** FLUSH CHUNKS */
+/** PUBLIC API */
 
 export default (pathsOrIds: Files, stats: Stats, opts?: Options): Api =>
   flushChunks(pathsOrIds, stats, IS_WEBPACK, opts)
@@ -55,17 +55,13 @@ const flushChunks = (
   opts?: Options = {}
 ) => {
   const beforeEntries = opts.before || defaults.before
-
-  const files = !isWebpack
-    ? flushBabel(pathsOrIds, stats, opts.rootDir)
-    : flushWebpack(pathsOrIds, stats)
-
+  const files = flush(pathsOrIds, stats, opts.rootDir, isWebpack)
   const afterEntries = opts.after || defaults.after
 
   return createApiWithCss(
     [
       ...resolveEntryFiles(beforeEntries, stats.assetsByChunkName),
-      ...files.filter(isUnique),
+      ...files,
       ...resolveEntryFiles(afterEntries, stats.assetsByChunkName)
     ],
     stats.publicPath,
@@ -73,7 +69,20 @@ const flushChunks = (
   )
 }
 
+const flushFiles = (pathsOrIds: Files, stats: Stats, rootDir: ?string) =>
+  flush(pathsOrIds, stats, rootDir, IS_WEBPACK)
+
 /** BABEL VS. WEBPACK FLUSHING */
+
+const flush = (
+  pathsOrIds: Files,
+  stats: Stats,
+  rootDir: ?string,
+  isWebpack: boolean
+) =>
+  (!isWebpack
+    ? flushBabel(pathsOrIds, stats, rootDir).filter(isUnique)
+    : flushWebpack(pathsOrIds, stats).filter(isUnique))
 
 const flushBabel = (paths: Files, stats: Stats, rootDir: ?string): Files => {
   if (!rootDir) {
@@ -162,6 +171,8 @@ const resolveEntryFiles = (
 
 export {
   flushChunks,
+  flushFiles,
+  flush,
   flushBabel,
   flushWebpack,
   createFilesByPath,

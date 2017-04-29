@@ -10,7 +10,7 @@
     "commit": "git-cz",
     "semantic-release": "semantic-release pre && npm publish && semantic-release post",
     "prepublish": "yarn build",
-    "format": "prettier --single-quote --parser=flow --semi=false --write '{src,__tests__}/**/*.js'",
+    "format": "prettier --single-quote --parser=flow --semi=false --write '{src,__tests__}/**/*.js' && npm run lint",
     "test": "jest",
     "lint": "eslint --fix src __tests__ __fixtures__",
     "build": "babel src -d dist"

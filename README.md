@@ -626,5 +626,23 @@ you'll send over the wire in initial requests. You be the judge of that. We look
 opinion.
 
 
+## Low-level API: `flushFiles`
+For advanced users that want all files flushed (`.js`, `.css` or whatever else might be in there) and without named entry chunks (such as `bootstrap`, `vendor`, and `main`), here you go:
+
+```js
+import ReactLoadable from 'react-loadable'
+import { flushFiles } from 'webpack-flush-chunks'
+
+const moduleIds = ReactLoadable.flushRequires()
+const files = flushFiles(moduleIds, stats, /* rootDir if babel */)
+
+const scripts = files.filter(file => /\.js/.test(file))
+const styles = files.filter(file => /\.css/.test(file))
+```
+> i.e. this will get you all files corresponding to flushed "dynamic" chunks, no more
+
+If what you want is full-on compilation `chunk` objects (and any information it contains, which for 99% of most projects is unnecessary), create an issue and we'll add it. But until there is an actual need, we would like to keep the API simple.
+
+
 ## Contributing
 We use [commitizen](https://github.com/commitizen/cz-cli), so run `npm run commit` to make commits. A command-line form will appear, requiring you answer a few questions to automatically produce a nicely formatted commit. Releases, semantic version numbers, tags and changelogs will automatically be generated based on these commits thanks to [semantic-release](https://github.com/semantic-release/semantic-release). Be good.
