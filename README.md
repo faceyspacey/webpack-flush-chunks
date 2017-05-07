@@ -118,7 +118,7 @@ Because of the way Webpack works where "bootstrap" code must be run before any a
 it's imperative bootstrap and common chunks are generated and placed at the beginning, 
 thereby allowing you to place dynamic chunks before your entry chunk which kickstarts app rendering.
 
-In conjunction with your Webpack configuration (which we'll specify below), `flushChunks` solves these problems for you by consuming your Webpack compilation `stats` and generating strings and components you can embed in the final output rendered on the server.
+In conjunction with your Webpack configuration (which we'll specify [below](#webpack-configuration)), `flushChunks` solves these problems for you by consuming your Webpack compilation `stats` and generating strings and components you can embed in the final output rendered on the server.
 
 ## Usage
 
