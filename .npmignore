@@ -12,3 +12,4 @@ webpack.config.js
 __tests__
 coverage
 src
+*.png

@@ -116,7 +116,7 @@ Array [
 ]
 `;
 
-exports[`stylesAsString() 1`] = `
+exports[`unit tests stylesAsString() 1`] = `
 "/Users/jamesgillmore/App/build/main.css- the css! 
 
 /Users/jamesgillmore/App/build/0.css- the css! 

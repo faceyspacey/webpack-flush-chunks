@@ -1,38 +1,6 @@
 // Jest Snapshot v1, https://goo.gl/fbAQLP
 
-exports[`createFilesByModuleId() 1`] = `
-Object {
-  "asdf": Array [
-    "1.js",
-    "1.no_css.js",
-    "1.css",
-  ],
-  "qwer": Array [
-    "0.js",
-    "0.no_css.js",
-    "0.css",
-  ],
-  "zxcv": Array [],
-}
-`;
-
-exports[`createFilesByPath() 1`] = `
-Object {
-  "./src/Components/Bar.js": Array [],
-  "./src/Components/Example.js": Array [
-    "0.js",
-    "0.no_css.js",
-    "0.css",
-  ],
-  "./src/Components/Foo.js": Array [
-    "1.js",
-    "1.no_css.js",
-    "1.css",
-  ],
-}
-`;
-
-exports[`flushChunks() called as pure function babel: uses default entries when no named chunks provided via opts.before/after 1`] = `
+exports[`flushChunks() called as pure function babel - chunkNames 1`] = `
 Object {
   "Css": [Function],
   "Js": [Function],
@@ -63,6 +31,39 @@ Object {
 }
 `;
 
+exports[`flushChunks() called as pure function babel: uses default entries when no named chunks provided via opts.before/after 1`] = `
+Object {
+  "Css": [Function],
+  "Js": [Function],
+  "Styles": [Function],
+  "css": Object {
+    "toString": [Function],
+  },
+  "js": Object {
+    "toString": [Function],
+  },
+  "outputPath": undefined,
+  "publicPath": "/static",
+  "scripts": Array [
+    "bootstrap.no_css.js",
+    "vendor.no_css.js",
+    "0.no_css.js",
+    "1.no_css.js",
+    "2.no_css.js",
+    "main.no_css.js",
+  ],
+  "styles": Object {
+    "toString": [Function],
+  },
+  "stylesheets": Array [
+    "0.css",
+    "1.css",
+    "2.css",
+    "main.css",
+  ],
+}
+`;
+
 exports[`flushChunks() called as pure function babel: uses entries provided by opts.before/after 1`] = `
 Object {
   "Css": [Function],
@@ -77,6 +78,39 @@ Object {
   "outputPath": undefined,
   "publicPath": "/static",
   "scripts": Array [
+    "vendor.no_css.js",
+    "0.no_css.js",
+    "1.no_css.js",
+    "2.no_css.js",
+    "main.no_css.js",
+  ],
+  "styles": Object {
+    "toString": [Function],
+  },
+  "stylesheets": Array [
+    "0.css",
+    "1.css",
+    "2.css",
+    "main.css",
+  ],
+}
+`;
+
+exports[`flushChunks() called as pure function webpack - chunkNames 1`] = `
+Object {
+  "Css": [Function],
+  "Js": [Function],
+  "Styles": [Function],
+  "css": Object {
+    "toString": [Function],
+  },
+  "js": Object {
+    "toString": [Function],
+  },
+  "outputPath": undefined,
+  "publicPath": "/static",
+  "scripts": Array [
+    "bootstrap.no_css.js",
     "vendor.no_css.js",
     "0.no_css.js",
     "1.no_css.js",
@@ -111,6 +145,7 @@ Object {
     "vendor.no_css.js",
     "0.no_css.js",
     "1.no_css.js",
+    "2.no_css.js",
     "main.no_css.js",
   ],
   "styles": Object {
@@ -119,6 +154,7 @@ Object {
   "stylesheets": Array [
     "0.css",
     "1.css",
+    "2.css",
     "main.css",
   ],
 }
@@ -141,6 +177,7 @@ Object {
     "vendor.no_css.js",
     "0.no_css.js",
     "1.no_css.js",
+    "2.no_css.js",
     "main.no_css.js",
   ],
   "styles": Object {
@@ -149,7 +186,169 @@ Object {
   "stylesheets": Array [
     "0.css",
     "1.css",
+    "2.css",
     "main.css",
+  ],
+}
+`;
+
+exports[`flushFiles() called as a pure function babel - chunkNames 1`] = `
+Array [
+  "0.js",
+  "0.no_css.js",
+  "0.css",
+  "0.js.map",
+  "0.no_css.js.map",
+  "0.css.map",
+  "1.js",
+  "1.no_css.js",
+  "1.css",
+  "1.js.map",
+  "1.no_css.js.map",
+  "1.css.map",
+]
+`;
+
+exports[`flushFiles() called as a pure function babel - moduleIds 1`] = `
+Array [
+  "0.js",
+  "0.no_css.js",
+  "0.css",
+  "0.js.map",
+  "0.no_css.js.map",
+  "0.css.map",
+  "1.js",
+  "1.no_css.js",
+  "1.css",
+  "1.js.map",
+  "1.no_css.js.map",
+  "1.css.map",
+  "2.js",
+  "2.no_css.js",
+  "2.css",
+  "2.js.map",
+  "2.no_css.js.map",
+  "2.css.map",
+]
+`;
+
+exports[`flushFiles() called as a pure function filter: by function 1`] = `
+Array [
+  "0.css",
+  "1.css",
+]
+`;
+
+exports[`flushFiles() called as a pure function filter: by regex 1`] = `
+Array [
+  "0.css",
+  "1.css",
+]
+`;
+
+exports[`flushFiles() called as a pure function filter: by string (file extension) 1`] = `
+Array [
+  "0.css",
+  "1.css",
+]
+`;
+
+exports[`flushFiles() called as a pure function webpack - chunkNames 1`] = `
+Array [
+  "0.js",
+  "0.no_css.js",
+  "0.css",
+  "0.js.map",
+  "0.no_css.js.map",
+  "0.css.map",
+  "1.js",
+  "1.no_css.js",
+  "1.css",
+  "1.js.map",
+  "1.no_css.js.map",
+  "1.css.map",
+]
+`;
+
+exports[`flushFiles() called as a pure function webpack - moduleIds 1`] = `
+Array [
+  "0.js",
+  "0.no_css.js",
+  "0.css",
+  "0.js.map",
+  "0.no_css.js.map",
+  "0.css.map",
+  "1.js",
+  "1.no_css.js",
+  "1.css",
+  "1.js.map",
+  "1.no_css.js.map",
+  "1.css.map",
+  "2.js",
+  "2.no_css.js",
+  "2.css",
+  "2.js.map",
+  "2.no_css.js.map",
+  "2.css.map",
+]
+`;
+
+exports[`unit tests createFilesByModuleId() 1`] = `
+Object {
+  "asdf": Array [
+    "1.js",
+    "1.no_css.js",
+    "1.css",
+    "1.js.map",
+    "1.no_css.js.map",
+    "1.css.map",
+  ],
+  "fgij": Array [],
+  "qwer": Array [
+    "0.js",
+    "0.no_css.js",
+    "0.css",
+    "0.js.map",
+    "0.no_css.js.map",
+    "0.css.map",
+  ],
+  "zxcv": Array [
+    "2.js",
+    "2.no_css.js",
+    "2.css",
+    "2.js.map",
+    "2.no_css.js.map",
+    "2.css.map",
+  ],
+}
+`;
+
+exports[`unit tests createFilesByPath() 1`] = `
+Object {
+  "./src/Components/Bar.js": Array [
+    "2.js",
+    "2.no_css.js",
+    "2.css",
+    "2.js.map",
+    "2.no_css.js.map",
+    "2.css.map",
+  ],
+  "./src/Components/Baz.js": Array [],
+  "./src/Components/Example.js": Array [
+    "0.js",
+    "0.no_css.js",
+    "0.css",
+    "0.js.map",
+    "0.no_css.js.map",
+    "0.css.map",
+  ],
+  "./src/Components/Foo.js": Array [
+    "1.js",
+    "1.no_css.js",
+    "1.css",
+    "1.js.map",
+    "1.no_css.js.map",
+    "1.css.map",
   ],
 }
 `;
