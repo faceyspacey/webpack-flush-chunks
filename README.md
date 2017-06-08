@@ -803,10 +803,10 @@ const externals = fs
 It should be clear by now that the main work in using `webpack-flush-chunks` is not in application code, but in setting up your
 webpack configs. It's therefore extremely important that you're armed with the precise boilerplates for the route you're taking. Here they are:
 
-- **[Universal Webpack Boilerplate](https://github.com/faceyspacey/webpack-flush-chunks-boilerplate-webpack)**
-- **[Universal Webpack Boilerplate (using chunkNames + magic comments)](https://github.com/faceyspacey/webpack-flush-chunks-boilerplate-webpack-chunknames)**
-- [Babel Boilerplate](https://github.com/faceyspacey/webpack-flush-chunks-boilerplate-babel)
-- [Babel Boilerplate (using chunkNames + magic comments)](https://github.com/faceyspacey/webpack-flush-chunks-boilerplate-babel-chunknames)
+- **[Universal Webpack Boilerplate](https://github.com/faceyspacey/flush-chunks-boilerplate-webpack)**
+- **[Universal Webpack Boilerplate (using chunkNames + magic comments)](https://github.com/faceyspacey/flush-chunks-boilerplate-webpack-chunknames)**
+- [Babel Boilerplate](https://github.com/faceyspacey/flush-chunks-boilerplate-babel)
+- [Babel Boilerplate (using chunkNames + magic comments)](https://github.com/faceyspacey/flush-chunks-boilerplate-babel-chunknames)
 
 After checking out the above boilerplates, clicking around their files, and running the different setups (development, production, babel server, etc), how to use *Webpack Flush Chunks* should make sense,
 and you should have a fool-proof place to start from.
