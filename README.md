@@ -702,7 +702,7 @@ plugins: [
 
 > Note: hashed or named module plugins are never needed with Babel, as Babel paths are deterministically used instead.
 
-## How to Get Stats in
+## How to Get Stats
 
 The general premise is to run your webpack compiler in code rather than from the command line. By doing so,
 you get access to your client bundle's stats in a callback. Let's go over both a Babel and a Webpack example:
