@@ -1,5 +1,4 @@
 // @noflow
-import React from 'react'
 import {
   default as createApiWithCss,
   getJsFileRegex,
@@ -9,9 +8,8 @@ import {
 } from '../src/createApiWithCss'
 
 jest.mock('fs', () => ({
-  readFileSync: fileName => {
-    return fileName + '- the css! \n/*# sourceMappingURL=/static/main.js.map */'
-  }
+  readFileSync: fileName =>
+    `${fileName}- the css! \n/*# sourceMappingURL=/static/main.js.map */`
 }))
 
 const publicPath = '/static/'
@@ -28,9 +26,9 @@ describe('createApiWithCss()', () => {
     expect(api.Styles() /*? $.props.children */).toMatchSnapshot()
     expect(api.Css() /*? $.props */).toMatchSnapshot()
 
-    expect(api.js + '' /*? */).toMatchSnapshot()
-    expect(api.styles + '' /*? */).toMatchSnapshot()
-    expect(api.css + '' /*? */).toMatchSnapshot()
+    expect(`${api.js}` /*? */).toMatchSnapshot()
+    expect(`${api.styles}` /*? */).toMatchSnapshot()
+    expect(`${api.css}` /*? */).toMatchSnapshot()
 
     expect(api.scripts /*? $ */).toMatchSnapshot()
     expect(api.stylesheets /*? $ */).toMatchSnapshot()
@@ -47,9 +45,9 @@ describe('createApiWithCss()', () => {
     expect(api.Styles() /*? $.props.children */).toMatchSnapshot()
     expect(api.Css() /*? $.props */).toMatchSnapshot()
 
-    expect(api.js + '' /*? */).toMatchSnapshot()
-    expect(api.styles + '' /*? */).toMatchSnapshot()
-    expect(api.css + '' /*? */).toMatchSnapshot()
+    expect(`${api.js}` /*? */).toMatchSnapshot()
+    expect(`${api.styles}` /*? */).toMatchSnapshot()
+    expect(`${api.css}` /*? */).toMatchSnapshot()
 
     expect(api.scripts /*? $ */).toMatchSnapshot()
     expect(api.stylesheets /*? $ */).toMatchSnapshot()
@@ -84,37 +82,39 @@ describe('createApiWithCss()', () => {
 
 /** HELPERS */
 
-test('getJsFileRegex()', () => {
-  let files = ['main.no_css.js', 'main.js', 'main.css']
-  let regex = getJsFileRegex(files)
-  expect(regex).toEqual(/\.no_css\.js$/)
+describe('unit tests', () => {
+  test('getJsFileRegex()', () => {
+    let files = ['main.no_css.js', 'main.js', 'main.css']
+    let regex = getJsFileRegex(files)
+    expect(regex).toEqual(/\.no_css\.js$/)
 
-  files = ['main.js', 'main.css']
-  regex = getJsFileRegex(files)
-  expect(regex).toEqual(/\.js$/)
-})
+    files = ['main.js', 'main.css']
+    regex = getJsFileRegex(files)
+    expect(regex).toEqual(/\.js$/)
+  })
 
-test('isJs()', () => {
-  const jsRegex = /\.js$/
-  const noCssRegex = /\.no_css\.js$/
+  test('isJs()', () => {
+    const jsRegex = /\.js$/
+    const noCssRegex = /\.no_css\.js$/
 
-  expect(isJs(jsRegex, 'main.js')).toEqual(true)
-  expect(isJs(noCssRegex, 'main.js')).toEqual(false)
+    expect(isJs(jsRegex, 'main.js')).toEqual(true)
+    expect(isJs(noCssRegex, 'main.js')).toEqual(false)
 
-  expect(isJs(noCssRegex, 'main.no_css.js')).toEqual(true)
-  expect(isJs(noCssRegex, 'main.js')).toEqual(false)
+    expect(isJs(noCssRegex, 'main.no_css.js')).toEqual(true)
+    expect(isJs(noCssRegex, 'main.js')).toEqual(false)
 
-  expect(isJs(jsRegex, 'main.hot-update.js')).toEqual(false)
-  expect(isJs(noCssRegex, 'main.hot-update.js')).toEqual(false)
-})
+    expect(isJs(jsRegex, 'main.hot-update.js')).toEqual(false)
+    expect(isJs(noCssRegex, 'main.hot-update.js')).toEqual(false)
+  })
 
-test('isCss()', () => {
-  expect(isCss('main.css')).toEqual(true)
-  expect(isCss('main.js')).toEqual(false)
-})
+  test('isCss()', () => {
+    expect(isCss('main.css')).toEqual(true)
+    expect(isCss('main.js')).toEqual(false)
+  })
 
-test('stylesAsString()', () => {
-  const stylesheets = ['main.css', '0.css']
-  const css = stylesAsString(stylesheets, outputPath) /*? $ */
-  expect(css).toMatchSnapshot()
+  test('stylesAsString()', () => {
+    const stylesheets = ['main.css', '0.css']
+    const css = stylesAsString(stylesheets, outputPath) /*? $ */
+    expect(css).toMatchSnapshot()
+  })
 })

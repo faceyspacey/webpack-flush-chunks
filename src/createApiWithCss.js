@@ -40,7 +40,7 @@ export default (
     // 1) Use as React components using ReactDOM.renderToStaticMarkup, eg:
     // <html><Styles /><Js /><html>
     Js: () => (
-      <span id='__javascript__'>
+      <span>
         {scripts.map((file, key) => (
           <script
             type='text/javascript'
@@ -51,7 +51,7 @@ export default (
       </span>
     ),
     Styles: () => (
-      <span id='__styles__'>
+      <span>
         {stylesheets.map((file, key) => (
           <link rel='stylesheet' href={`${publicPath}/${file}`} key={key} />
         ))}
@@ -62,23 +62,19 @@ export default (
     js: {
       toString: () =>
         // lazy-loaded in case not used
-        `<span id='__javascript__'>
-          ${scripts
+        scripts
           .map(
             file =>
               `<script type='text/javascript' src='${publicPath}/${file}'></script>`
           )
-          .join('\n')}
-        </span>`
+          .join('\n')
     },
     styles: {
       toString: () =>
         // lazy-loaded in case not used
-        `<span id='__styles__'>
-          ${stylesheets
+        stylesheets
           .map(file => `<link rel='stylesheet' href='${publicPath}/${file}' />`)
-          .join('\n')}
-        </span>`
+          .join('\n')
     },
 
     // 3) Embed the raw css without needing to load another file.
@@ -87,17 +83,15 @@ export default (
     Css: () =>
       (DEV
         ? api.Styles()
-        : <span id='__styles__'>
-            <style>{stylesAsString(stylesheets, outputPath)}</style>
-          </span>),
+        : <span>
+          <style>{stylesAsString(stylesheets, outputPath)}</style>
+        </span>),
     css: {
       toString: () =>
         // lazy-loaded in case not used
         (DEV
           ? api.styles.toString()
-          : `<span id='__styles__'>
-          <style>${stylesAsString(stylesheets, outputPath)}</style>
-        </span>`)
+          : `<style>${stylesAsString(stylesheets, outputPath)}</style>`)
     },
 
     // 4) names of files without publicPath or outputPath prefixed:
@@ -141,7 +135,7 @@ const stylesAsString = (
   return stylesheets
     .map(file => {
       const filePath = `${path}/${file}`
-      return require('fs').readFileSync(filePath, 'utf8')
+      return fs.readFileSync(filePath, 'utf8')
     })
     .join('\n')
     .replace(/\/\*# sourceMappingURL=.+\*\//g, '') // hide prod sourcemap err

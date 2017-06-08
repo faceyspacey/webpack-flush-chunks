@@ -2,40 +2,51 @@
 import type { Api } from './createApiWithCss'
 import createApiWithCss from './createApiWithCss'
 
+declare function __webpack_require__(id: string): any
+
+type Files = Array<string>
 
 type FilesMap = {
   [key: string]: Array<string>
 }
+
 type Chunk = {
   id: number,
   files: Array<string>
 }
+
 type Module = {
   id: string,
   name: string,
   chunks: Array<number>
 }
+
 type Stats = {
   assetsByChunkName: FilesMap,
   chunks: Array<Chunk>,
   modules: Array<Module>,
   publicPath: string
 }
+
 type Options = {
+  moduleIds?: Files,
+  chunkNames?: Files,
   before?: Array<string>,
   after?: Array<string>,
   rootDir?: string,
   outputPath?: string
 }
 
-// `flushChunks` depends on React Loadable producing module IDs as strings
-// via: NamedModulesPlugin or HashedModuleIdsPlugin:
-type Files = Array<string>
+type Options2 = {
+  moduleIds?: Files,
+  chunkNames?: Files,
+  rootDir?: string,
+  filter?: string | Function | RegExp
+}
 
 let filesByPath = null
 let filesByModuleId = null
 
-const DEV = process.env.NODE_ENV === 'development'
 const IS_WEBPACK = typeof __webpack_require__ !== 'undefined'
 const IS_TEST = process.env.NODE_ENV === 'test'
 const defaults = {
@@ -43,39 +54,66 @@ const defaults = {
   after: ['main']
 }
 
-/** FLUSH RENDERED */
+/** PUBLIC API */
 
-export default (pathsOrIds: Files, stats: Stats, opts?: Options): Api =>
-  flushChunks(pathsOrIds, stats, IS_WEBPACK, opts)
+export default (stats: Stats, opts: Options): Api =>
+  flushChunks(stats, IS_WEBPACK, opts)
 
-const flushChunks = (
-  pathsOrIds: Files,
-  stats: Stats,
-  isWebpack: boolean,
-  opts?: Options = {}
-) => {
+const flushChunks = (stats: Stats, isWebpack: boolean, opts: Options = {}) => {
   const beforeEntries = opts.before || defaults.before
 
-  const files = !isWebpack
-    ? flushBabel(stats, pathsOrIds, opts.rootDir)
-    : flushWebpack(stats, pathsOrIds)
+  const files = opts.chunkNames
+    ? filesFromChunks(opts.chunkNames, stats.assetsByChunkName)
+    : flush(opts.moduleIds || [], stats, opts.rootDir, isWebpack)
 
   const afterEntries = opts.after || defaults.after
 
   return createApiWithCss(
     [
-      ...resolveEntryFiles(beforeEntries, stats.assetsByChunkName),
-      ...files.filter(isUnique),
-      ...resolveEntryFiles(afterEntries, stats.assetsByChunkName)
+      ...filesFromChunks(beforeEntries, stats.assetsByChunkName),
+      ...files,
+      ...filesFromChunks(afterEntries, stats.assetsByChunkName)
     ],
     stats.publicPath,
     opts.outputPath
   )
 }
 
+const flushFiles = (stats: Stats, opts: Options2) =>
+  flushFilesPure(stats, IS_WEBPACK, opts)
+
+const flushFilesPure = (stats: Stats, isWebpack: boolean, opts: Options2) => {
+  const files = opts.chunkNames
+    ? filesFromChunks(opts.chunkNames, stats.assetsByChunkName)
+    : flush(opts.moduleIds || [], stats, opts.rootDir, isWebpack)
+
+  const filter = opts.filter
+
+  if (filter) {
+    if (typeof filter === 'function') {
+      return files.filter(filter)
+    }
+
+    const regex = filter instanceof RegExp ? filter : new RegExp(`.${filter}$`)
+    return files.filter(file => regex.test(file))
+  }
+
+  return files
+}
+
 /** BABEL VS. WEBPACK FLUSHING */
 
-const flushBabel = (stats: Stats, paths: Files, rootDir: ?string): Files => {
+const flush = (
+  moduleIds: Files,
+  stats: Stats,
+  rootDir: ?string,
+  isWebpack: boolean
+) =>
+  (!isWebpack
+    ? flushBabel(moduleIds, stats, rootDir).filter(isUnique)
+    : flushWebpack(moduleIds, stats).filter(isUnique))
+
+const flushBabel = (paths: Files, stats: Stats, rootDir: ?string): Files => {
   if (!rootDir) {
     throw new Error(
       `No \`rootDir\` was provided as an option to \`flushChunks\`.
@@ -94,7 +132,7 @@ const flushBabel = (stats: Stats, paths: Files, rootDir: ?string): Files => {
   return concatFilesAtKeys(filesByPath, paths.map(p => normalizePath(p, dir)))
 }
 
-const flushWebpack = (stats: Stats, ids: Files): Files => {
+const flushWebpack = (ids: Files, stats: Stats): Files => {
   filesByModuleId = filesByModuleId && !IS_TEST
     ? filesByModuleId // cached
     : createFilesByModuleId(stats)
@@ -137,30 +175,34 @@ const isUnique = (v: string, i: number, self: Files): boolean =>
   self.indexOf(v) === i
 
 const normalizePath = (path: string, rootDir: string): string =>
-  path.replace(rootDir, '.').replace(/\.js$/, '') + '.js'
+  `${path.replace(rootDir, '.').replace(/\.js$/, '')}.js`
 
 const concatFilesAtKeys = (
   inputFilesMap: FilesMap,
   pathsOrIdsOrChunks: Array<any>
 ): Files =>
-  pathsOrIdsOrChunks.reduce((files, key) => {
-    return files.concat(inputFilesMap[key] || [])
-  }, [])
+  pathsOrIdsOrChunks.reduce(
+    (files, key) => files.concat(inputFilesMap[key] || []),
+    []
+  )
 
-const resolveEntryFiles = (
-  entryNames: Files,
+const filesFromChunks = (
+  chunkNames: Files,
   assetsByChunkName: FilesMap
 ): Files => {
-  const hasChunk = entry => assetsByChunkName[entry]
+  const hasChunk = entry => !!assetsByChunkName[entry]
   const entryToFiles = entry => assetsByChunkName[entry]
 
-  return [].concat(...entryNames.filter(hasChunk).map(entryToFiles))
+  return [].concat(...chunkNames.filter(hasChunk).map(entryToFiles))
 }
 
 /** EXPORTS FOR TESTS */
 
 export {
   flushChunks,
+  flushFiles,
+  flushFilesPure,
+  flush,
   flushBabel,
   flushWebpack,
   createFilesByPath,
@@ -168,5 +210,5 @@ export {
   isUnique,
   normalizePath,
   concatFilesAtKeys,
-  resolveEntryFiles
+  filesFromChunks
 }

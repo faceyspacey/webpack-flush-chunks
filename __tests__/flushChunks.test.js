@@ -1,6 +1,7 @@
 // @noflow
 import {
   flushChunks,
+  flushFilesPure,
   flushBabel,
   flushWebpack,
   createFilesByPath,
@@ -8,33 +9,40 @@ import {
   isUnique,
   normalizePath,
   concatFilesAtKeys,
-  resolveEntryFiles
+  filesFromChunks
 } from '../src/flushChunks'
 
 import {
   stats,
   rootDir,
   babelFilePaths,
-  webpackModuleIds
-} from '../__fixtures__/stats.js'
+  webpackModuleIds,
+  chunkNames
+} from '../__fixtures__/stats'
 
-/** FLUSH RENDERED */
+/** PUBLIC API */
 
 describe('flushChunks() called as pure function', () => {
   it('babel: uses default entries when no named chunks provided via opts.before/after', () => {
-    const files = flushChunks(babelFilePaths, stats, false, {
+    const files = flushChunks(stats, false, {
+      moduleIds: babelFilePaths,
       rootDir
     }) /*? */
+
     expect(files).toMatchSnapshot()
   })
 
   it('webpack: uses default entries when no named chunks provided via opts.before/after', () => {
-    const files = flushChunks(webpackModuleIds, stats, true) /*? */
+    const files = flushChunks(stats, true, {
+      moduleIds: webpackModuleIds
+    }) /*? */
+
     expect(files).toMatchSnapshot()
   })
 
   it('babel: uses entries provided by opts.before/after', () => {
-    const files = flushChunks(babelFilePaths, stats, false, {
+    const files = flushChunks(stats, false, {
+      moduleIds: babelFilePaths,
       before: ['vendor'],
       after: ['main'],
       rootDir
@@ -44,98 +52,185 @@ describe('flushChunks() called as pure function', () => {
   })
 
   it('webpack: uses entries provided by opts.before/after', () => {
-    const files = flushChunks(webpackModuleIds, stats, true, {
+    const files = flushChunks(stats, true, {
+      moduleIds: webpackModuleIds,
       before: ['vendor'],
       after: ['main']
     }) /*? */
 
     expect(files).toMatchSnapshot()
   })
+
+  it('babel - chunkNames', () => {
+    const files = flushChunks(stats, false, {
+      chunkNames,
+      rootDir
+    }) /*? */
+
+    expect(files).toMatchSnapshot()
+  })
+
+  it('webpack - chunkNames', () => {
+    const files = flushChunks(stats, true, {
+      chunkNames
+    }) /*? */
+
+    expect(files).toMatchSnapshot()
+  })
 })
 
-/** BABEL VS. WEBPACK FLUSHING */
+describe('flushFiles() called as a pure function', () => {
+  it('babel - moduleIds', () => {
+    const files = flushFilesPure(stats, false, {
+      moduleIds: babelFilePaths,
+      rootDir
+    }) /*? */
 
-test('flushBabel()', () => {
-  const files = flushBabel(stats, babelFilePaths, rootDir) /*? */
-  const allFiles = stats.chunks[0].files.concat(stats.chunks[1].files)
-  expect(files).toEqual(allFiles)
+    expect(files).toMatchSnapshot()
+  })
+
+  it('webpack - moduleIds', () => {
+    const files = flushFilesPure(stats, true, {
+      moduleIds: webpackModuleIds
+    }) /*? */
+
+    expect(files).toMatchSnapshot()
+  })
+
+  it('babel - chunkNames', () => {
+    const files = flushFilesPure(stats, false, {
+      chunkNames,
+      rootDir
+    }) /*? */
+
+    expect(files).toMatchSnapshot()
+  })
+
+  it('webpack - chunkNames', () => {
+    const files = flushFilesPure(stats, true, {
+      chunkNames
+    }) /*? */
+
+    expect(files).toMatchSnapshot()
+  })
+
+  it('filter: by string (file extension)', () => {
+    const files = flushFilesPure(stats, true, {
+      chunkNames,
+      filter: 'css'
+    }) /*? */
+
+    expect(files).toMatchSnapshot()
+  })
+
+  it('filter: by function', () => {
+    const files = flushFilesPure(stats, true, {
+      chunkNames,
+      filter: file => /\.css$/.test(file)
+    }) /*? */
+
+    expect(files).toMatchSnapshot()
+  })
+
+  it('filter: by regex', () => {
+    const files = flushFilesPure(stats, true, {
+      chunkNames,
+      filter: /\.css$/
+    }) /*? */
+
+    expect(files).toMatchSnapshot()
+  })
 })
 
-test('flushWebpack()', () => {
-  const files = flushWebpack(stats, webpackModuleIds) /*? */
-  const allFiles = stats.chunks[0].files.concat(stats.chunks[1].files)
-  expect(files).toEqual(allFiles)
-})
+describe('unit tests', () => {
+  /** BABEL VS. WEBPACK FLUSHING */
 
-test('flushBabel() throws with no rootDir argument', () => {
-  const flush = () => flushBabel(stats, babelFilePaths) /*? */
-  expect(flush).toThrow()
-})
+  test('flushBabel()', () => {
+    const files = flushBabel(babelFilePaths, stats, rootDir) /*? */
+    const allFiles = stats.chunks[0].files.concat(
+      stats.chunks[1].files,
+      stats.chunks[2].files
+    )
+    expect(files).toEqual(allFiles)
+  })
 
-/** CREATE FILES MAP */
+  test('flushWebpack()', () => {
+    const files = flushWebpack(webpackModuleIds, stats) /*? */
+    const allFiles = stats.chunks[0].files.concat(
+      stats.chunks[1].files,
+      stats.chunks[2].files
+    )
+    expect(files).toEqual(allFiles)
+  })
 
-test('createFilesByPath()', () => {
-  const filesByPath = createFilesByPath(stats) /*? */
+  test('flushBabel() throws with no rootDir argument', () => {
+    const flush = () => flushBabel(babelFilePaths, stats) /*? */
+    expect(flush).toThrow()
+  })
 
-  expect(Object.keys(filesByPath)).toEqual(babelFilePaths)
+  /** CREATE FILES MAP */
 
-  expect(filesByPath['./src/Components/Example.js']).toEqual([
-    '0.js',
-    '0.no_css.js',
-    '0.css'
-  ])
-  expect(filesByPath['./src/Components/Bar.js']).toEqual([]) // test against arrays of undefined
+  test('createFilesByPath()', () => {
+    const filesByPath = createFilesByPath(stats) /*? */
 
-  expect(filesByPath).toMatchSnapshot()
-})
+    expect(Object.keys(filesByPath)).toEqual(babelFilePaths)
 
-test('createFilesByModuleId()', () => {
-  const filesByPath = createFilesByModuleId(stats) /*? */
+    const files = stats.chunks[0].files
+    expect(filesByPath['./src/Components/Example.js']).toEqual(files)
+    expect(filesByPath['./src/Components/Baz.js']).toEqual([]) // test against arrays of undefined
 
-  expect(Object.keys(filesByPath)).toEqual(webpackModuleIds)
+    expect(filesByPath).toMatchSnapshot()
+  })
 
-  expect(filesByPath['qwer']).toEqual(['0.js', '0.no_css.js', '0.css'])
-  expect(filesByPath['zxcv']).toEqual([]) // test against arrays of undefined
+  test('createFilesByModuleId()', () => {
+    const filesByPath = createFilesByModuleId(stats) /*? */
 
-  expect(filesByPath).toMatchSnapshot()
-})
+    expect(Object.keys(filesByPath)).toEqual(webpackModuleIds)
 
-/** HELPERS */
+    const files = stats.chunks[0].files
+    expect(filesByPath.qwer).toEqual(files)
+    expect(filesByPath.fgij).toEqual([]) // test against arrays of undefined
 
-test('isUnique()', () => {
-  let filtered = [1, 2, 2].filter(isUnique)
-  expect(filtered).toEqual([1, 2])
+    expect(filesByPath).toMatchSnapshot()
+  })
 
-  filtered = [1, 2, 3].filter(isUnique)
-  expect(filtered).toEqual([1, 2, 3])
-})
+  /** HELPERS */
 
-test('normalizePath()', () => {
-  const path = '/Users/jamesgillmore/App/src/Components/Example.js'
-  const normalizedPath = normalizePath(path, rootDir)
+  test('isUnique()', () => {
+    let filtered = [1, 2, 2].filter(isUnique)
+    expect(filtered).toEqual([1, 2])
 
-  expect(normalizedPath).toEqual('./src/Components/Example.js')
-})
+    filtered = [1, 2, 3].filter(isUnique)
+    expect(filtered).toEqual([1, 2, 3])
+  })
 
-test('concatFilesAtKeys()', () => {
-  const filesMap = {
-    './src/Components/Example.js': ['0.js', '0.css'],
-    './src/Components/Foo.js': ['1.js', '1.css'],
-    './src/Components/Bar.js': ['2.js', '2.css']
-  }
-  const paths = ['./src/Components/Example.js', './src/Components/Bar.js']
-  const files = concatFilesAtKeys(filesMap, paths)
+  test('normalizePath()', () => {
+    const path = '/Users/jamesgillmore/App/src/Components/Example.js'
+    const normalizedPath = normalizePath(path, rootDir)
 
-  expect(files).toEqual(['0.js', '0.css', '2.js', '2.css'])
-})
+    expect(normalizedPath).toEqual('./src/Components/Example.js')
+  })
 
-test('resolveEntryFiles()', () => {
-  const entryNames = ['bootstrap', 'vendor', 'main']
-  const assetsByChunkName = {
-    bootstrap: ['bootstrap.js'],
-    main: ['main.js', 'main.css']
-  }
-  const outputFiles = resolveEntryFiles(entryNames, assetsByChunkName)
+  test('concatFilesAtKeys()', () => {
+    const filesMap = {
+      './src/Components/Example.js': ['0.js', '0.css'],
+      './src/Components/Foo.js': ['1.js', '1.css'],
+      './src/Components/Bar.js': ['2.js', '2.css']
+    }
+    const paths = ['./src/Components/Example.js', './src/Components/Bar.js']
+    const files = concatFilesAtKeys(filesMap, paths)
 
-  expect(outputFiles).toEqual(['bootstrap.js', 'main.js', 'main.css'])
+    expect(files).toEqual(['0.js', '0.css', '2.js', '2.css'])
+  })
+
+  test('filesFromChunks()', () => {
+    const entryNames = ['bootstrap', 'vendor', 'main']
+    const assetsByChunkName = {
+      bootstrap: ['bootstrap.js'],
+      main: ['main.js', 'main.css']
+    }
+    const outputFiles = filesFromChunks(entryNames, assetsByChunkName)
+
+    expect(outputFiles).toEqual(['bootstrap.js', 'main.js', 'main.css'])
+  })
 })
