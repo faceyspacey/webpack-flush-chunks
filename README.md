@@ -34,7 +34,7 @@
 
 # Webpack Flush Chunks
 
-> flush webpack chunks for SSR from React Loadable or similar packages
+> flush webpack chunks for SSR from [React Loadable](https://github.com/thejameskyle/react-loadable), [React Universal Component](https://github.com/faceyspacey/react-universal-component) or similar packages
 
 ```js
 import { flushModuleIds } from 'react-universal-component/server'
