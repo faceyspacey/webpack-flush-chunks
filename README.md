@@ -50,7 +50,6 @@ res.send(`
       ${styles}
     </head>
     <body>
-      ${styles}
       <div id="root">${app}</div>
       ${js}
     </body>
@@ -249,7 +248,7 @@ deep control of the amount of bytes you send in your initial request while takin
 Until now, the best you could do is split your app into chunks, but then additional requests on the client were needed 
 to get those chunks; and then on top of that the promise of server-side rendering was lost.
 
-> Note: if you require a less automated approach where you're given just the stylesheets and scripts corresponding to dynamic chunks (e.g. not `main.js`), see `flushFiles` in the [the low-level API section](#low-level-api-flush-files).
+> Note: if you require a less automated approach where you're given just the stylesheets and scripts corresponding to dynamic chunks (e.g. not `main.js`), see `flushFiles` in the [the low-level API section](#low-level-api-flushfiles).
 
 ## Options API:
 
@@ -791,9 +790,9 @@ It should be clear by now that the main work in using `webpack-flush-chunks` is 
 webpack configs. It's therefore extremely important that you're armed with the precise boilerplates for the route you're taking. Here they are:
 
 - **[Universal Webpack Boilerplate](https://github.com/faceyspacey/webpack-flush-chunks-boilerplate-webpack)**
-- **[Universal Webpack Boilerplate (using chunkNames + magic comments)](https://github.com/faceyspacey/webpack-flush-chunks-boilerplate-webpack)**
-- [Babel Boilerplate](https://github.com/faceyspacey/webpack-flush-chunks-boilerplate-webpack)
-- [Babel Boilerplate (using chunkNames + magic comments)](https://github.com/faceyspacey/webpack-flush-chunks-boilerplate-webpack)
+- **[Universal Webpack Boilerplate (using chunkNames + magic comments)](https://github.com/faceyspacey/webpack-flush-chunks-boilerplate-webpack-chunknames)**
+- [Babel Boilerplate](https://github.com/faceyspacey/webpack-flush-chunks-boilerplate-babel)
+- [Babel Boilerplate (using chunkNames + magic comments)](https://github.com/faceyspacey/webpack-flush-chunks-boilerplate-babel-chunknames)
 
 After checking out the above boilerplates, clicking around their files, and running the different setups (development, production, babel server, etc), how to use *Webpack Flush Chunks* should make sense,
 and you should have a fool-proof place to start from.
@@ -820,7 +819,7 @@ opinion.
 
 
 ## Low-level API: `flushFiles`
-For advanced users that want all files flushed (`.js`, `.css` or whatever else might be in there) and without named entry chunks (such as `bootstrap`, `vendor`, and `main`), here you go:
+For advanced users that want access to all files flushed (`.js`, `.css` or whatever else might be in there) and without named entry chunks you already know (such as `bootstrap`, `vendor`, and `main`), here you go:
 
 ```js
 import { flushChunkNames } from 'react-universal-component/server'
