@@ -73,6 +73,10 @@ It's a companion package to **React Universal Component** or any code splitting 
 
 The dream of **code-splitting everywhere** is finally here.
 
+**Medium Release Article:**
+
+https://medium.com/@faceyspacey/code-cracked-for-code-splitting-ssr-in-reactlandia-react-loadable-webpack-flush-chunks-and-1a6b0112a8b8
+
 ## Installation
 
 ```
