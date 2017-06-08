@@ -65,9 +65,7 @@ Via a simple API it gives you the chunks (javascript, stylesheets, etc) correspo
 
 This solves the problem of either having to make additional requests to get async components or React checksum mismatches when you do in fact correctly synchronously render the component server-side and send it to the client, but where the client expects to render a `<Loading />` component.
 
-It offers 2 functions `flushChunks` and `flushFiles`, which are the equivalent of `ReactDOMServer.renderToString` when it comes to code-splitting. They are used in
-server-rendering to extract the minimal amount of chunks to send to the client, thereby solving a missing piece for code-splitting:
-server-side rendering. 
+It offers 2 functions `flushChunks` and `flushFiles`, which are the equivalent of `ReactDOMServer.renderToString` when it comes to code-splitting. They are used in server-rendering to extract the minimal amount of chunks to send to the client, thereby solving a missing piece for code-splitting: server-side rendering. 
 
 It's a companion package to **React Universal Component** or any code splitting package that flushes an array of module ids or paths rendered on the server. It's very flexible and allows for all the common configurations we can currently think of.
 
