@@ -61,18 +61,21 @@ export default (stats: Stats, opts: Options): Api =>
 
 const flushChunks = (stats: Stats, isWebpack: boolean, opts: Options = {}) => {
   const beforeEntries = opts.before || defaults.before
+  const jsBefore = filesFromChunks(beforeEntries, stats.assetsByChunkName)
 
   const files = opts.chunkNames
     ? filesFromChunks(opts.chunkNames, stats.assetsByChunkName)
     : flush(opts.moduleIds || [], stats, opts.rootDir, isWebpack)
 
   const afterEntries = opts.after || defaults.after
+  const jsAfter = filesFromChunks(afterEntries, stats.assetsByChunkName)
 
   return createApiWithCss(
+    [...jsBefore, ...files, ...jsAfter],
     [
-      ...filesFromChunks(beforeEntries, stats.assetsByChunkName),
-      ...files,
-      ...filesFromChunks(afterEntries, stats.assetsByChunkName)
+      ...jsBefore, // likely nothing in here, but if so: bootstrap.css, vendor.css, etc
+      ...jsAfter.reverse(), // main.css, someElseYouPutBeforeMain.css, etc
+      ...files // correct incrementing order already
     ],
     stats.publicPath,
     opts.outputPath

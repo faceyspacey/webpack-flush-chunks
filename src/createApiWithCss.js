@@ -28,12 +28,13 @@ const DEV = process.env.NODE_ENV === 'development'
 
 export default (
   files: Array<string>,
+  filesOrderedForCss: Array<string>,
   publicPath: string,
   outputPath: ?string
 ): Api => {
   const regex = getJsFileRegex(files)
   const scripts = files.filter(file => isJs(regex, file))
-  const stylesheets = files.filter(isCss)
+  const stylesheets = filesOrderedForCss.filter(isCss)
   publicPath = publicPath.replace(/\/$/, '')
 
   const api = {
