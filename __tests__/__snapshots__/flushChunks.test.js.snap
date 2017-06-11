@@ -25,8 +25,8 @@ Object {
   },
   "stylesheets": Array [
     "main.css",
-    "1.css",
     "0.css",
+    "1.css",
   ],
 }
 `;
@@ -57,9 +57,9 @@ Object {
   },
   "stylesheets": Array [
     "main.css",
-    "2.css",
-    "1.css",
     "0.css",
+    "1.css",
+    "2.css",
   ],
 }
 `;
@@ -89,9 +89,9 @@ Object {
   },
   "stylesheets": Array [
     "main.css",
-    "2.css",
-    "1.css",
     "0.css",
+    "1.css",
+    "2.css",
   ],
 }
 `;
@@ -121,8 +121,8 @@ Object {
   },
   "stylesheets": Array [
     "main.css",
-    "1.css",
     "0.css",
+    "1.css",
   ],
 }
 `;
@@ -153,9 +153,9 @@ Object {
   },
   "stylesheets": Array [
     "main.css",
-    "2.css",
-    "1.css",
     "0.css",
+    "1.css",
+    "2.css",
   ],
 }
 `;
@@ -185,9 +185,9 @@ Object {
   },
   "stylesheets": Array [
     "main.css",
-    "2.css",
-    "1.css",
     "0.css",
+    "1.css",
+    "2.css",
   ],
 }
 `;
