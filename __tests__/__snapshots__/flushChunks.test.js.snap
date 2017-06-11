@@ -24,9 +24,9 @@ Object {
     "toString": [Function],
   },
   "stylesheets": Array [
-    "0.css",
-    "1.css",
     "main.css",
+    "1.css",
+    "0.css",
   ],
 }
 `;
@@ -56,10 +56,10 @@ Object {
     "toString": [Function],
   },
   "stylesheets": Array [
-    "0.css",
-    "1.css",
-    "2.css",
     "main.css",
+    "2.css",
+    "1.css",
+    "0.css",
   ],
 }
 `;
@@ -88,10 +88,10 @@ Object {
     "toString": [Function],
   },
   "stylesheets": Array [
-    "0.css",
-    "1.css",
-    "2.css",
     "main.css",
+    "2.css",
+    "1.css",
+    "0.css",
   ],
 }
 `;
@@ -120,9 +120,9 @@ Object {
     "toString": [Function],
   },
   "stylesheets": Array [
-    "0.css",
-    "1.css",
     "main.css",
+    "1.css",
+    "0.css",
   ],
 }
 `;
@@ -152,10 +152,10 @@ Object {
     "toString": [Function],
   },
   "stylesheets": Array [
-    "0.css",
-    "1.css",
-    "2.css",
     "main.css",
+    "2.css",
+    "1.css",
+    "0.css",
   ],
 }
 `;
@@ -184,10 +184,10 @@ Object {
     "toString": [Function],
   },
   "stylesheets": Array [
-    "0.css",
-    "1.css",
-    "2.css",
     "main.css",
+    "2.css",
+    "1.css",
+    "0.css",
   ],
 }
 `;

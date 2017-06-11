@@ -16,11 +16,11 @@ exports[`createApiWithCss() generates js + style components, strings and arrays 
 exports[`createApiWithCss() generates js + style components, strings and arrays 2`] = `
 <span>
   <link
-    href="/static/0.css"
+    href="/static/main.css"
     rel="stylesheet"
   />
   <link
-    href="/static/main.css"
+    href="/static/0.css"
     rel="stylesheet"
   />
 </span>
@@ -29,9 +29,9 @@ exports[`createApiWithCss() generates js + style components, strings and arrays 
 exports[`createApiWithCss() generates js + style components, strings and arrays 3`] = `
 <span>
   <style>
-    /Users/jamesgillmore/App/build/0.css- the css! 
-    
     /Users/jamesgillmore/App/build/main.css- the css! 
+    
+    /Users/jamesgillmore/App/build/0.css- the css! 
     
   </style>
 </span>
@@ -43,14 +43,14 @@ exports[`createApiWithCss() generates js + style components, strings and arrays 
 `;
 
 exports[`createApiWithCss() generates js + style components, strings and arrays 5`] = `
-"<link rel='stylesheet' href='/static/0.css' />
-<link rel='stylesheet' href='/static/main.css' />"
+"<link rel='stylesheet' href='/static/main.css' />
+<link rel='stylesheet' href='/static/0.css' />"
 `;
 
 exports[`createApiWithCss() generates js + style components, strings and arrays 6`] = `
-"<style>/Users/jamesgillmore/App/build/0.css- the css! 
+"<style>/Users/jamesgillmore/App/build/main.css- the css! 
 
-/Users/jamesgillmore/App/build/main.css- the css! 
+/Users/jamesgillmore/App/build/0.css- the css! 
 </style>"
 `;
 
@@ -63,8 +63,8 @@ Array [
 
 exports[`createApiWithCss() generates js + style components, strings and arrays 8`] = `
 Array [
-  "0.css",
   "main.css",
+  "0.css",
 ]
 `;
 

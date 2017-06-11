@@ -33,7 +33,7 @@ export default (
 ): Api => {
   const regex = getJsFileRegex(files)
   const scripts = files.filter(file => isJs(regex, file))
-  const stylesheets = files.filter(isCss)
+  const stylesheets = files.filter(isCss).reverse()
   publicPath = publicPath.replace(/\/$/, '')
 
   const api = {
