@@ -211,7 +211,7 @@ import universal from 'react-universal-component'
 
 const UniversalComponent = universal(() => import(/* webpackChunkName: 'chunk-1' */ '../components/Foo'), {
   resolve: () => require.resolveWeak('./Foo'),
-  chunkNames: 'chunk-1'
+  chunkName: 'chunk-1'
 })
 
 export default () =>
