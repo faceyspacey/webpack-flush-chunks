@@ -3,10 +3,19 @@
 exports[`flushChunks() called as pure function babel - chunkNames 1`] = `
 Object {
   "Css": [Function],
+  "CssChunks": [Function],
   "Js": [Function],
   "Styles": [Function],
   "css": Object {
     "toString": [Function],
+  },
+  "cssChunks": Object {
+    "toString": [Function],
+  },
+  "cssChunksHash": Object {
+    "chunk1": "/static/0.css",
+    "chunk2": "/static/1.css",
+    "main": "/static/main.css",
   },
   "js": Object {
     "toString": [Function],
@@ -34,10 +43,19 @@ Object {
 exports[`flushChunks() called as pure function babel: uses default entries when no named chunks provided via opts.before/after 1`] = `
 Object {
   "Css": [Function],
+  "CssChunks": [Function],
   "Js": [Function],
   "Styles": [Function],
   "css": Object {
     "toString": [Function],
+  },
+  "cssChunks": Object {
+    "toString": [Function],
+  },
+  "cssChunksHash": Object {
+    "chunk1": "/static/0.css",
+    "chunk2": "/static/1.css",
+    "main": "/static/main.css",
   },
   "js": Object {
     "toString": [Function],
@@ -67,10 +85,19 @@ Object {
 exports[`flushChunks() called as pure function babel: uses entries provided by opts.before/after 1`] = `
 Object {
   "Css": [Function],
+  "CssChunks": [Function],
   "Js": [Function],
   "Styles": [Function],
   "css": Object {
     "toString": [Function],
+  },
+  "cssChunks": Object {
+    "toString": [Function],
+  },
+  "cssChunksHash": Object {
+    "chunk1": "/static/0.css",
+    "chunk2": "/static/1.css",
+    "main": "/static/main.css",
   },
   "js": Object {
     "toString": [Function],
@@ -99,10 +126,19 @@ Object {
 exports[`flushChunks() called as pure function webpack - chunkNames 1`] = `
 Object {
   "Css": [Function],
+  "CssChunks": [Function],
   "Js": [Function],
   "Styles": [Function],
   "css": Object {
     "toString": [Function],
+  },
+  "cssChunks": Object {
+    "toString": [Function],
+  },
+  "cssChunksHash": Object {
+    "chunk1": "/static/0.css",
+    "chunk2": "/static/1.css",
+    "main": "/static/main.css",
   },
   "js": Object {
     "toString": [Function],
@@ -130,10 +166,19 @@ Object {
 exports[`flushChunks() called as pure function webpack: uses default entries when no named chunks provided via opts.before/after 1`] = `
 Object {
   "Css": [Function],
+  "CssChunks": [Function],
   "Js": [Function],
   "Styles": [Function],
   "css": Object {
     "toString": [Function],
+  },
+  "cssChunks": Object {
+    "toString": [Function],
+  },
+  "cssChunksHash": Object {
+    "chunk1": "/static/0.css",
+    "chunk2": "/static/1.css",
+    "main": "/static/main.css",
   },
   "js": Object {
     "toString": [Function],
@@ -163,10 +208,19 @@ Object {
 exports[`flushChunks() called as pure function webpack: uses entries provided by opts.before/after 1`] = `
 Object {
   "Css": [Function],
+  "CssChunks": [Function],
   "Js": [Function],
   "Styles": [Function],
   "css": Object {
     "toString": [Function],
+  },
+  "cssChunks": Object {
+    "toString": [Function],
+  },
+  "cssChunksHash": Object {
+    "chunk1": "/static/0.css",
+    "chunk2": "/static/1.css",
+    "main": "/static/main.css",
   },
   "js": Object {
     "toString": [Function],

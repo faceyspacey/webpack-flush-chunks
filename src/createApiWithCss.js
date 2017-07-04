@@ -6,6 +6,10 @@ type StatelessComponent = () => React.Element<*>
 type ObjectString = {
   toString: () => string
 }
+export type CssChunksHash = {
+  [key: string]: string
+}
+
 export type Api = {
   Js: StatelessComponent,
   Styles: StatelessComponent,
@@ -30,7 +34,8 @@ export default (
   files: Array<string>,
   filesOrderedForCss: Array<string>,
   publicPath: string,
-  outputPath: ?string
+  outputPath: ?string,
+  cssChunksHash: CssChunksHash
 ): Api => {
   const regex = getJsFileRegex(files)
   const scripts = files.filter(file => isJs(regex, file))
@@ -101,7 +106,20 @@ export default (
 
     // 5) for completeness provide the paths even though they were inputs:
     publicPath,
-    outputPath
+    outputPath,
+
+    // 6) special goodness for dual-file import()
+    cssChunksHash,
+    CssChunks: () => (
+      <script
+        type='text/javascript'
+        dangerouslySetInnerHTML={{ __html: JSON.stringify(cssChunksHash) }}
+      />
+    ),
+    cssChunks: {
+      toString: () =>
+        `<script type='text/javascript'>window.__CSS_CHUNKS__= ${JSON.stringify(cssChunksHash)}</script>`
+    }
   }
 
   return api

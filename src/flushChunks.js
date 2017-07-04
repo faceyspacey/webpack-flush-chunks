@@ -1,5 +1,5 @@
 // @flow
-import type { Api } from './createApiWithCss'
+import type { Api, CssChunksHash } from './createApiWithCss'
 import createApiWithCss from './createApiWithCss'
 
 declare function __webpack_require__(id: string): any
@@ -78,7 +78,8 @@ const flushChunks = (stats: Stats, isWebpack: boolean, opts: Options = {}) => {
       ...files // correct incrementing order already
     ],
     stats.publicPath,
-    opts.outputPath
+    opts.outputPath,
+    createCssHash(stats.assetsByChunkName, stats.publicPath)
   )
 }
 
@@ -198,6 +199,16 @@ const filesFromChunks = (
 
   return [].concat(...chunkNames.filter(hasChunk).map(entryToFiles))
 }
+
+const createCssHash = (
+  assetsByChunkName: FilesMap,
+  publicPath: string
+): CssChunksHash =>
+  Object.keys(assetsByChunkName).reduce((hash, name) => {
+    const file = assetsByChunkName[name].find(file => file.endsWith('.css'))
+    if (file) hash[name] = `${publicPath}${file}`
+    return hash
+  }, {})
 
 /** EXPORTS FOR TESTS */
 
