@@ -205,6 +205,7 @@ const createCssHash = (
   publicPath: string
 ): CssChunksHash =>
   Object.keys(assetsByChunkName).reduce((hash, name) => {
+    if (!assetsByChunkName[name]) return hash
     const file = assetsByChunkName[name].find(file => file.endsWith('.css'))
     if (file) hash[name] = `${publicPath}${file}`
     return hash
