@@ -30,9 +30,9 @@
   </a>
 </p>
 
-<div style="text-align: center;">
+<p align="center">
   <img src="https://github.com/faceyspacey/webpack-flush-chunks/blob/master/poo.jpg" height="350" />
-</div>
+</p>
 
 Use this package server-side to flush webpack chunks from *[React Universal Component](https://github.com/faceyspacey/react-universal-component)* or any package that flushes an array of rendered `moduleIds` or `chunkNames`.
 
