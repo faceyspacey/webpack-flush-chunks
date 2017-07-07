@@ -34,7 +34,7 @@
   </a>
 </p>
 
-![webpack-flush-chunks](https://raw.githubusercontent.com/faceyspacey/redux-first-router/master/poo.jpg)
+![webpack-flush-chunks](https://github.com/faceyspacey/webpack-flush-chunks/blob/master/poo.jpg)
 
 Use this package server-side to flush webpack chunks from *[React Universal Component](https://github.com/faceyspacey/react-universal-component)* or any package that flushes an array of rendered `moduleIds` or `chunkNames`.
 
