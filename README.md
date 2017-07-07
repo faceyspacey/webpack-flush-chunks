@@ -28,13 +28,9 @@
   <a href="https://www.npmjs.com/package/webpack-flush-chunks">
     <img src="https://img.shields.io/npm/l/webpack-flush-chunks.svg" alt="License" />
   </a>
-
-  <a href="https://gitter.im/webpack-flush-chunks">
-    <img src="https://img.shields.io/gitter/room/nwjs/nw.js.svg" alt="Gitter Chat" />
-  </a>
 </p>
 
-![webpack-flush-chunks](https://github.com/faceyspacey/webpack-flush-chunks/blob/master/poo.jpg)
+<img src="https://github.com/faceyspacey/webpack-flush-chunks/blob/master/poo.jpg" style="margin: 0 auto; height: 50%;" />
 
 Use this package server-side to flush webpack chunks from *[React Universal Component](https://github.com/faceyspacey/react-universal-component)* or any package that flushes an array of rendered `moduleIds` or `chunkNames`.
 
