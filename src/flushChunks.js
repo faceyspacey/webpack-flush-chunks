@@ -6,7 +6,7 @@ declare function __webpack_require__(id: string): any
 
 type Files = Array<string>
 
-type FilesMap = {
+export type FilesMap = {
   [key: string]: Array<string>
 }
 
@@ -21,7 +21,7 @@ type Module = {
   chunks: Array<number>
 }
 
-type Stats = {
+export type Stats = {
   assetsByChunkName: FilesMap,
   chunks: Array<Chunk>,
   modules: Array<Module>,
@@ -77,9 +77,8 @@ const flushChunks = (stats: Stats, isWebpack: boolean, opts: Options = {}) => {
       ...jsAfter.reverse(), // main.css, someElseYouPutBeforeMain.css, etc
       ...files // correct incrementing order already
     ],
-    stats.publicPath,
-    opts.outputPath,
-    createCssHash(stats.assetsByChunkName, stats.publicPath)
+    stats,
+    opts.outputPath
   )
 }
 
@@ -199,17 +198,6 @@ const filesFromChunks = (
 
   return [].concat(...chunkNames.filter(hasChunk).map(entryToFiles))
 }
-
-const createCssHash = (
-  assetsByChunkName: FilesMap,
-  publicPath: string
-): CssChunksHash =>
-  Object.keys(assetsByChunkName).reduce((hash, name) => {
-    if (!assetsByChunkName[name] || !assetsByChunkName[name].find) return hash
-    const file = assetsByChunkName[name].find(file => file.endsWith('.css'))
-    if (file) hash[name] = `${publicPath}${file}`
-    return hash
-  }, {})
 
 /** EXPORTS FOR TESTS */
 

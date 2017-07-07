@@ -13,4 +13,5 @@ __tests__
 coverage
 src
 *.png
+*.jpg
 .idea

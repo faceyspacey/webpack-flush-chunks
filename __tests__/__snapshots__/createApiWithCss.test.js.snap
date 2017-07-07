@@ -116,6 +116,14 @@ Array [
 ]
 `;
 
+exports[`unit tests createCssHash() 1`] = `
+Object {
+  "chunk1": "/static/0.css",
+  "chunk2": "/static/1.css",
+  "main": "/static/main.css",
+}
+`;
+
 exports[`unit tests stylesAsString() 1`] = `
 "/Users/jamesgillmore/App/build/main.css- the css! 
 

@@ -2,12 +2,15 @@
 import React from 'react'
 import fs from 'fs'
 
+import type { Stats, FilesMap } from './flushChunks'
+
+export type CssChunksHash = {
+  [key: string]: string
+}
+
 type StatelessComponent = () => React.Element<*>
 type ObjectString = {
   toString: () => string
-}
-export type CssChunksHash = {
-  [key: string]: string
 }
 
 export type Api = {
@@ -33,14 +36,14 @@ const DEV = process.env.NODE_ENV === 'development'
 export default (
   files: Array<string>,
   filesOrderedForCss: Array<string>,
-  publicPath: string,
-  outputPath: ?string,
-  cssChunksHash: CssChunksHash
+  stats: Stats,
+  outputPath: ?string
 ): Api => {
+  const publicPath = stats.publicPath.replace(/\/$/, '')
   const regex = getJsFileRegex(files)
   const scripts = files.filter(file => isJs(regex, file))
   const stylesheets = filesOrderedForCss.filter(isCss)
-  publicPath = publicPath.replace(/\/$/, '')
+  const cssHashRaw = createCssHash(stats)
 
   const api = {
     // 1) Use as React components using ReactDOM.renderToStaticMarkup, eg:
@@ -109,16 +112,16 @@ export default (
     outputPath,
 
     // 6) special goodness for dual-file import()
-    cssChunksHash,
-    CssChunks: () => (
+    cssHashRaw,
+    CssHash: () => (
       <script
         type='text/javascript'
-        dangerouslySetInnerHTML={{ __html: JSON.stringify(cssChunksHash) }}
+        dangerouslySetInnerHTML={{ __html: JSON.stringify(cssHashRaw) }}
       />
     ),
-    cssChunks: {
+    cssHash: {
       toString: () =>
-        `<script type='text/javascript'>window.__CSS_CHUNKS__= ${JSON.stringify(cssChunksHash)}</script>`
+        `<script type='text/javascript'>window.__CSS_CHUNKS__= ${JSON.stringify(cssHashRaw)}</script>`
     }
   }
 
@@ -127,17 +130,17 @@ export default (
 
 /** HELPERS */
 
-const getJsFileRegex = (files: Array<string>): RegExp => {
+export const getJsFileRegex = (files: Array<string>): RegExp => {
   const isUsingExtractCssChunk = !!files.find(file => file.includes('no_css'))
   return isUsingExtractCssChunk ? /\.no_css\.js$/ : /\.js$/
 }
 
-const isJs = (regex: RegExp, file: string): boolean =>
+export const isJs = (regex: RegExp, file: string): boolean =>
   regex.test(file) && !/\.hot-update\.js$/.test(file)
 
-const isCss = (file: string): boolean => /\.css$/.test(file)
+export const isCss = (file: string): boolean => /\.css$/.test(file)
 
-const stylesAsString = (
+export const stylesAsString = (
   stylesheets: Array<string>,
   outputPath: ?string
 ): string => {
@@ -160,6 +163,16 @@ const stylesAsString = (
     .replace(/\/\*# sourceMappingURL=.+\*\//g, '') // hide prod sourcemap err
 }
 
-/** EXPORTS FOR TESTING */
-
-export { getJsFileRegex, isJs, isCss, stylesAsString }
+export const createCssHash = ({
+  assetsByChunkName,
+  publicPath
+}: {
+  assetsByChunkName: FilesMap,
+  publicPath: string
+}): CssChunksHash =>
+  Object.keys(assetsByChunkName).reduce((hash, name) => {
+    if (!assetsByChunkName[name] || !assetsByChunkName[name].find) return hash
+    const file = assetsByChunkName[name].find(file => file.endsWith('.css'))
+    if (file) hash[name] = `${publicPath}${file}`
+    return hash
+  }, {})

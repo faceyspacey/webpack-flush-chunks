@@ -4,8 +4,11 @@ import {
   getJsFileRegex,
   isJs,
   isCss,
-  stylesAsString
+  stylesAsString,
+  createCssHash
 } from '../src/createApiWithCss'
+
+import { stats } from '../__fixtures__/stats'
 
 jest.mock('fs', () => ({
   readFileSync: fileName =>
@@ -21,12 +24,7 @@ describe('createApiWithCss()', () => {
   it('generates js + style components, strings and arrays', () => {
     const files = ['0.js', '0.css', 'main.js', 'main.css']
     const filesForCss = ['main.js', 'main.css', '0.js', '0.css']
-    const api = createApiWithCss(
-      files,
-      filesForCss,
-      publicPath,
-      outputPath
-    ) /*? $ */
+    const api = createApiWithCss(files, filesForCss, stats, outputPath) /*? $ */
 
     expect(api.Js() /*? $.props.children */).toMatchSnapshot()
     expect(api.Styles() /*? $.props.children */).toMatchSnapshot()
@@ -45,7 +43,7 @@ describe('createApiWithCss()', () => {
 
   it('uses files with extension "no_css.js" if available', () => {
     const files = ['main.js', 'main.no_css.js', 'main.css']
-    const api = createApiWithCss(files, files, publicPath, outputPath) /*? $ */
+    const api = createApiWithCss(files, files, stats, outputPath) /*? $ */
 
     expect(api.Js() /*? $.props.children */).toMatchSnapshot()
     expect(api.Styles() /*? $.props.children */).toMatchSnapshot()
@@ -64,7 +62,7 @@ describe('createApiWithCss()', () => {
 
   it('throws when rendering css without outputPath', () => {
     const files = ['main.js', 'main.css']
-    const api = createApiWithCss(files, files, publicPath)
+    const api = createApiWithCss(files, files, stats)
 
     expect(api.Css /*? */).toThrow()
     expect(api.css.toString /*? */).toThrow()
@@ -73,14 +71,14 @@ describe('createApiWithCss()', () => {
   it('adds trailing slash to public path', () => {
     const files = ['main.js']
     const publicPath = '/static'
-    const api = createApiWithCss(files, files, publicPath)
+    const api = createApiWithCss(files, files, stats)
 
     expect(api.js.toString() /*? */).toContain('/static/main.js')
   })
 
   it('does not include scripts with extension "hot-update.js"', () => {
     const files = ['main.js', 'main.hot-update.js']
-    const api = createApiWithCss(files, files, publicPath)
+    const api = createApiWithCss(files, files, stats)
 
     expect(api.scripts /*? */).not.toContain('main.hot-update.js')
   })
@@ -122,5 +120,10 @@ describe('unit tests', () => {
     const stylesheets = ['main.css', '0.css']
     const css = stylesAsString(stylesheets, outputPath) /*? $ */
     expect(css).toMatchSnapshot()
+  })
+
+  test('createCssHash()', () => {
+    const hash = createCssHash(stats) /*? $ */
+    expect(hash).toMatchSnapshot()
   })
 })
