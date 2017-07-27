@@ -7,7 +7,7 @@
 </a>
 
 
-# Webpack Flush Chunks [![Gitter](http://cdn.reactlandia.com/reactlandia-chat.png)](https://gitter.im/Reactlandia/Lobby)
+# Webpack Flush Chunks
 
 
 <p align="center">
