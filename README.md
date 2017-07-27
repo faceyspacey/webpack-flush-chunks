@@ -1,4 +1,11 @@
-🍾🍾🍾 **[GIT CLONE LOCAL DEMO](https://github.com/faceyspacey/universal-demo)** 🚀🚀🚀
+<a href="https://gitter.im/Reactlandia/Lobby" target="_blank">
+  <img alt="Edit Redux-First Router Demo" src="http://cdn.reactlandia.com/chat-badge-reactlandia.png">
+</a>
+
+<a href="https://codesandbox.io/s/github/faceyspacey/redux-first-router-codesandbox" target="_blank">
+  <img alt="Edit Redux-First Router Demo" src="https://codesandbox.io/static/img/play-codesandbox.svg">
+</a>
+
 
 # Webpack Flush Chunks [![Gitter](http://cdn.reactlandia.com/reactlandia-chat.png)](https://gitter.im/Reactlandia/Lobby)
 
@@ -31,6 +38,10 @@
   <a href="https://www.npmjs.com/package/webpack-flush-chunks">
     <img src="https://img.shields.io/npm/l/webpack-flush-chunks.svg" alt="License" />
   </a>
+</p>
+
+<p align="center">
+🍾🍾🍾 <a href="https://github.com/faceyspacey/universal-demo)">GIT CLONE LOCAL DEMO</a> 🚀🚀🚀
 </p>
 
 <p align="center">
@@ -75,7 +86,7 @@ It offers 2 functions `flushChunks` and `flushFiles`, which you call immediately
 
 The dream of **code-splitting everywhere** is finally here.
 
-**Medium Articles:**
+**Reactlandia Articles:**
 
 - [code-cracked-for-ssr-plus-splitting-in-reactlandia](https://medium.com/@faceyspacey/code-cracked-for-code-splitting-ssr-in-reactlandia-react-loadable-webpack-flush-chunks-and-1a6b0112a8b8)
 
