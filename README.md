@@ -1,4 +1,5 @@
-# Webpack Flush Chunks [![Gitter](https://img.shields.io/gitter/room/nwjs/nw.js.svg?style=flat-square)](https://gitter.im/faceyspacey/Lobby)
+# Webpack Flush Chunks [![Gitter](https://img.shields.io/gitter/room/nwjs/nw.js.svg?style=flat-square)](https://gitter.im/Reactlandia/Lobby)
+
 
 <p align="center">
   <a href="https://www.npmjs.com/package/webpack-flush-chunks">
@@ -82,14 +83,11 @@ https://medium.com/@faceyspacey/code-cracked-for-code-splitting-ssr-in-reactland
 
 ```
 yarn add react-universal-component webpack-flush-chunks 
+yarn add --dev babel-plugin-universal-import extract-css-chunks-webpack-plugin
 ```
+- ***Babel Plugin Universal Import*** is used to make `react-universal-component` as frictionless as possible. It removes the need to provide additional options to insure synchronous rendering happens on the server and on the client on initial load. These packages aren't required, but while this strategy is emerging we are simplifying things by focusing on a single route.
 
-Optionally to generate multiple CSS files for each chunk (with HMR!) install:
-```
-yarn add --dev extract-css-chunks-webpack-plugin
-```
-
-***Extract Css Chunks Webpack Plugin*** is another companion package made to complete the CSS side of the code-splitting dream. It uses the `cssHash` string to asynchronously request CSS assets as part of a "dual import" when calling `import()`. To learn more visit: [extract-css-chunks-webpack-plugin](https://github.com/faceyspacey/extract-css-chunks-webpack-plugin) and [babel-plugin-dual-import](https://github.com/faceyspacey/babel-plugin-dual-import).
+- ***Extract Css Chunks Webpack Plugin*** is another companion package made to complete the CSS side of the code-splitting dream. It uses the `cssHash` string to asynchronously request CSS assets as part of a "dual import" when calling `import()`. To learn more visit: [extract-css-chunks-webpack-plugin](https://github.com/faceyspacey/extract-css-chunks-webpack-plugin) and [babel-plugin-universal-import](https://github.com/faceyspacey/babel-plugin-universal-import).
 
 *...if you like to move fast, visit the [boilerplates section](#boilerplates).*
 
@@ -139,51 +137,23 @@ and takeaway anyone who's pursued this route comes upon.*
 
 In conjunction with your Webpack configuration (which we'll specify [below](#webpack-configuration)), *Webpack Flush Chunks* solves these problems for you by consuming your Webpack compilation `stats` and generating strings and components you can embed in the final output rendered on the server.
 
-
-## Usage (if not using Webpack's "magic comments" for chunk names)
-
-Call `ReactUniversalComponent.flushModuleIds` immediately after `ReactDOMServer.renderToString`, and then pass the returned `moduleIds` plus your Webpack client bundle's 
-compilation stats to `flushChunks`. The return object of `flushChunks` will provide several options you can embed in your response string. The easiest is the `js` and `styles` strings: 
-
-```js
-import ReactDOMServer from 'react-dom/server'
-import { flushModuleIds } from 'react-universal-component/server'
-import flushChunks from 'webpack-flush-chunks'
-
-const app = ReactDOMServer.renderToString(<App />)
-const moduleIds = flushModuleIds()
-const { js, styles, cssHash } = flushChunks(stats, { moduleIds })
-
-res.send(`
-  <!doctype html>
-  <html>
-    <head>
-      ${styles}
-    </head>
-    <body>
-      <div id="root">${app}</div>
-      ${js}
-      ${cssHash}
-    </body>
-  </html>
-`)
+*.babelrc:*
 ```
+{
+  "plugins": ["universal-import"]
+}
 
-
-**As of Webpack 2.4.1 (released spring 2017) you can the new "magic comments" feature to name chunks created by `import()`:**
+```
 
 *src/components/App.js:*
 ```js
 import universal from 'react-universal-component'
 
-const UniversalComponent = universal(() => import(/* webpackChunkName: 'chunk-1' */ '../components/Foo'), {
-  resolve: () => require.resolveWeak('./Foo'),
-  chunkName: 'chunk-1'
-})
+const UniversalComponent = universal(props => import(`./${props.page})
 
 export default () =>
   <div>
-    <UniversalComponent />
+    <UniversalComponent page='Foo' />
   </div>
 ```
 
@@ -206,8 +176,8 @@ res.send(`
     </head>
     <body>
       <div id="root">${app}</div>
-      ${js}
       ${cssHash}
+      ${js}
     </body>
   </html>
 `)
@@ -221,12 +191,7 @@ res.send(`
 
 ```js
 flushChunks(stats, {
-  moduleIds: ReactUniversalComponent.flushModuleIds(),
-
-  // or:
-  // chunkNames: ReactUniversalComponent.flushChunkNames(), // not both
-
-  // optional:
+  chunkNames: ReactUniversalComponent.flushChunkNames(),
   before: ['bootstrap', 'vendor'],                // default
   after: ['main'],                                // default
   rootDir: path.resolve(__dirname, '..'),         // required only for a Babel-compiled server not using chunkNames
@@ -234,9 +199,8 @@ flushChunks(stats, {
 })
 ```
 
-If you are rendering *both your client and server with webpack* and using the *default 
-names* for entry chunks, **only `moduleIds` or `chunkNames` are required**. If you're rendering the server with Babel and not using `chunkNames`,  `rootDir` is also required. Here is a description of all possible options:
 
+- **chunkNames** - ***array of chunks flushed from `react-universal-component`
 - **before** - ***array of named entries that come BEFORE your dynamic chunks:*** A typical 
 pattern is to create a `vendor` chunk. A better strategy is to create a `vendor` and a `bootstrap` chunk. The "bootstrap"
 chunk is a name provided to the `CommonsChunkPlugin` which has no entry point specified for it. The plugin by default removes 
@@ -686,4 +650,7 @@ Reviewing a package's tests are a great way to get familiar with it. It's direct
 
 Below is a screenshot of this module's tests running in [Wallaby](https://wallabyjs.com) *("An Integrated Continuous Testing Tool for JavaScript")* which everyone in the React community should be using. It's fantastic and has taken my entire workflow to the next level. It re-runs your tests on every change along with comprehensive logging, bi-directional linking to your IDE, in-line code coverage indicators, **and even snapshot comparisons + updates for Jest!** I requestsed that feature by the way :). It's basically a substitute for live-coding that inspires you to test along your journey.
 
-![require-universal-module wallaby tests screenshot](./tests-screenshot.png)
+![webpack-flush-chunks wallaby tests screenshot](./tests-screenshot.png)
+
+## More from FaceySpacey in Reactlandia
+- [redux-first-router](https://github.com/faceyspacey/redux-first-router). It's made to work perfectly with *Universal*. Together they comprise our *"frameworkless"* Redux-based approach to what Next.js does (splitting, SSR, prefetching, routing).
