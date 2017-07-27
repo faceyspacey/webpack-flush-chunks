@@ -1,4 +1,6 @@
-# Webpack Flush Chunks [![Gitter](https://img.shields.io/gitter/room/nwjs/nw.js.svg?style=flat-square)](https://gitter.im/Reactlandia/Lobby)
+🍾🍾🍾 **[GIT CLONE LOCAL DEMO](https://github.com/faceyspacey/universal-demo)** 🚀🚀🚀
+
+# Webpack Flush Chunks [![Gitter](http://cdn.reactlandia.com/reactlandia-chat.png)](https://gitter.im/Reactlandia/Lobby)
 
 
 <p align="center">
@@ -32,10 +34,10 @@
 </p>
 
 <p align="center">
-  <img src="https://github.com/faceyspacey/webpack-flush-chunks/blob/master/poo.jpg" height="350" />
+  <img src="./poo.jpg" height="350" />
 </p>
 
-Use this package server-side to flush webpack chunks from *[React Universal Component](https://github.com/faceyspacey/react-universal-component)* or any package that flushes an array of rendered `moduleIds` or `chunkNames`.
+Use this package server-side to flush webpack chunks from *[React Universal Component](https://github.com/faceyspacey/react-universal-component)* or any package that flushes an array of rendered `moduleIds` or `chunkNames`. The preferred approach is `chunkNames`, as that's what [babel-plugin-universal-import](https://github.com/faceyspacey/babel-plugin-universal-import) focuses on.
 
 ```js
 import { flushChunkNames } from 'react-universal-component/server'
@@ -54,30 +56,32 @@ res.send(`
     </head>
     <body>
       <div id="root">${app}</div>
-      ${js}
       ${cssHash}
+      ${js}
     </body>
   </html>
 `)
 ```
 
-The code has been cracked for while now for Server Side Rendering and Code-Splitting *individually*. Accomplishing both *simultaneously* has been an impossibility without jumping through major hoops or using a *framework*, specifically Next.js.
+The code has been cracked for while now for Server Side Rendering and Code-Splitting *individually*. Accomplishing both *simultaneously* has been an impossibility without jumping through major hoops or using a *framework*, specifically Next.js. Our tools are for "power users" that prefer the *frameworkless* approach.
 
 *Webpack Flush Chunks* is essentially the backend to universal rendering components like [React Universal Component](https://github.com/faceyspacey/react-universal-component). It works with any "universal" component/module that buffers a list of `moduleIds` or `chunkNames` evaluated. 
 
-Via a simple API it gives you the chunks (javascript, stylesheets, etc) corresponding to the modules that were ***synchronously*** rendered on the server, which otherwise are *asynchronously* rendered on the client. In doing so, it also allows your first client-side render on page-load to render those otherwise async components ***synchronously***! 
+Via a simple API it gives you the chunks (javascript, stylesheets, etc) corresponding to the modules that were ***synchronously*** rendered on the server, which without this package would be *asynchronously* rendered on the client. In doing so, it also allows your first client-side render on page-load to render async components ***synchronously***! 
 
-This solves the problem of either having to make additional requests to get async components or React checksum mismatches when you do in fact correctly synchronously render the component server-side and send it to the client, but where the client expects to render a `<Loading />` component.
+This solves the problem of having to make additional requests to get async components plus React checksum mismatches when the client expects to render a `<Loading />` component.
 
-It offers 2 functions `flushChunks` and `flushFiles`, which are the equivalent of `ReactDOMServer.renderToString` when it comes to code-splitting. They are used in server-rendering to extract the minimal amount of chunks to send to the client, thereby solving a missing piece for code-splitting: server-side rendering. 
-
-It's a companion package to **React Universal Component** or any code splitting package that flushes an array of module ids or paths rendered on the server. It's very flexible and allows for all the common configurations we can currently think of.
+It offers 2 functions `flushChunks` and `flushFiles`, which you call immediately after `ReactDOMServer.renderToString`. They are used in server-rendering to extract the minimal amount of chunks to send to the client, thereby solving a missing piece for code-splitting: server-side rendering. 
 
 The dream of **code-splitting everywhere** is finally here.
 
-**Medium Release Article:**
+**Medium Articles:**
 
-https://medium.com/@faceyspacey/code-cracked-for-code-splitting-ssr-in-reactlandia-react-loadable-webpack-flush-chunks-and-1a6b0112a8b8
+- [code-cracked-for-ssr-plus-splitting-in-reactlandia](https://medium.com/@faceyspacey/code-cracked-for-code-splitting-ssr-in-reactlandia-react-loadable-webpack-flush-chunks-and-1a6b0112a8b8)
+
+- [react-universal-component-2-and-babel-plugin-universal-import](https://medium.com/@faceyspacey/code-cracked-for-code-splitting-ssr-in-reactlandia-react-loadable-webpack-flush-chunks-and-1a6b0112a8b8) 🚀
+
+- [how-to-use-webpack-magic-comments-with-react-universal-component](https://medium.com/@faceyspacey/how-to-use-webpacks-new-magic-comment-feature-with-react-universal-component-ssr-a38fd3e296a)
 
 ## Installation
 
@@ -85,22 +89,26 @@ https://medium.com/@faceyspacey/code-cracked-for-code-splitting-ssr-in-reactland
 yarn add react-universal-component webpack-flush-chunks 
 yarn add --dev babel-plugin-universal-import extract-css-chunks-webpack-plugin
 ```
-- ***Babel Plugin Universal Import*** is used to make `react-universal-component` as frictionless as possible. It removes the need to provide additional options to insure synchronous rendering happens on the server and on the client on initial load. These packages aren't required, but while this strategy is emerging we are simplifying things by focusing on a single route.
+- ***[Babel Plugin Universal Import](https://github.com/faceyspacey/babel-plugin-universal-import)*** is used to make `react-universal-component` as frictionless as possible. It removes the need to provide additional options to insure synchronous rendering happens on the server and on the client on initial load. These packages aren't required, but usage as frictionless as possible.
 
-- ***Extract Css Chunks Webpack Plugin*** is another companion package made to complete the CSS side of the code-splitting dream. It uses the `cssHash` string to asynchronously request CSS assets as part of a "dual import" when calling `import()`. To learn more visit: [extract-css-chunks-webpack-plugin](https://github.com/faceyspacey/extract-css-chunks-webpack-plugin) and [babel-plugin-universal-import](https://github.com/faceyspacey/babel-plugin-universal-import).
+- ***[Extract Css Chunks Webpack Plugin](https://github.com/faceyspacey/extract-css-chunks-webpack-plugin)*** is another companion package made to complete the CSS side of the code-splitting dream. It uses the `cssHash` string to asynchronously request CSS assets as part of a "dual import" when calling `import()`. 
 
-*...if you like to move fast, visit the [boilerplates section](#boilerplates).*
+
+
+*If you like to move fast, git clone the [universal-demo](https://github.com/faceyspacey/universal-demo)*.
 
 ## How It Works
 
 *React Universal Component*, when used on the server, skips the *loading* phase and syncronously renders your contained component, while recording the ID of 
 its corresponding module. *React Universal Component* may be used multiple times and therefore may record multiple split points. `flushChunks/flushFiles` is then able 
-to determine the minimal set of chunks required to re-render those modules/components on the client. From there it outputs strings or React components 
+to determine the minimal set of chunks required to re-render those modules/components on the client. From there it outputs strings, arrays or React components 
 containing the precise javascript files (and CSS files) to embed in your HTML response. 
 
 The result is a server-rendered response whose *"checksum"* 
 matches the one generated on the client, so that another client render is not needed, and more importantly so that another request to the server for
 an additional chunk is not needed.
+
+For future imports performed on user navigation, the "dual-import" mechanism of `babel-plugin-universal-import` will request a stylesheet. To accomplish that, a hash of chunk names to stylsheets is provided so you can embed it in the page, similar to what webpack does with your js chunks in its bootstrap code.
 
 Before we examine how to use `flushChunks/flushFiles`, let's take a look at the desired output. It's something like this:
 
@@ -124,6 +132,14 @@ Before we examine how to use `flushChunks/flushFiles`, let's take a look at the 
 
   <!-- after entry chunks -->
   <script type='text/javascript' src='/static/main.js'></script>
+
+  <!-- stylsheets that will be requested when import() is called -->
+  <script>
+    window.__CSS_CHUNKS__ = {
+      Foo: '/static/Foo.css',
+      Bar: '/static/Bar.css'
+    }
+  </script>
 </body>
 ```
 
@@ -132,10 +148,9 @@ Notice that chunks `0` and `7` are served, but not chunks `1-6` or `8+`. That's 
 
 Because of the way Webpack works where "bootstrap" code must be run before any additional chunks can be registered, 
 it's imperative bootstrap and common chunks are generated and placed at the beginning, 
-thereby allowing you to place dynamic chunks before your entry chunk which kickstarts app rendering. *This is a key gotcha
-and takeaway anyone who's pursued this route comes upon.*
+thereby allowing you to place dynamic chunks before your entry chunk which kickstarts app rendering.
 
-In conjunction with your Webpack configuration (which we'll specify [below](#webpack-configuration)), *Webpack Flush Chunks* solves these problems for you by consuming your Webpack compilation `stats` and generating strings and components you can embed in the final output rendered on the server.
+In conjunction with your Webpack configuration (which we'll specify [below](#webpack-configuration)), *Webpack Flush Chunks* solves these problems for you by consuming your Webpack compilation `stats` and generating strings, arrays and components you can embed in the final output rendered on the server.
 
 *.babelrc:*
 ```
@@ -194,13 +209,13 @@ flushChunks(stats, {
   chunkNames: ReactUniversalComponent.flushChunkNames(),
   before: ['bootstrap', 'vendor'],                // default
   after: ['main'],                                // default
-  rootDir: path.resolve(__dirname, '..'),         // required only for a Babel-compiled server not using chunkNames
   outputPath: path.resolve(__dirname, '../dist'), // required only if you want to serve raw CSS
 })
 ```
 
 
 - **chunkNames** - ***array of chunks flushed from `react-universal-component`
+
 - **before** - ***array of named entries that come BEFORE your dynamic chunks:*** A typical 
 pattern is to create a `vendor` chunk. A better strategy is to create a `vendor` and a `bootstrap` chunk. The "bootstrap"
 chunk is a name provided to the `CommonsChunkPlugin` which has no entry point specified for it. The plugin by default removes 
@@ -214,13 +229,6 @@ provide this option if you have a `bootstrap` chunk, or `vendor` chunk or both, 
 Similar to `before`, `after` contains an array of chunks you want to come after the dynamic chunks that
 your universal component flushes. Typically you have just a `main` chunk, and if that's the case, you can ignore this option,
 as that's the default.
-
-- **rootDir** - ***absolute path to the directory containing your package.json file:*** If you are rendering your server code with Webpack as well, this option can be ignored. However, if
-you're rendering the server with Babel, you **must** provide the root directory of your app so
-modules rendered by Babel on the server can be linked to their equivalents rendered by Webpack on the client. So for example, if your
-client entry script is `app/src/index.js`, and you're calling `flushChunks` from `app/server/render.js`, you will want 
-to pass `path.join(__dirname, '..')`, which is essentially `app/`. We recommend you checkout and run  
-[one of our boilerplates](#boilerplates) for a clear example.
 
 - **outputPath** - ***absolute path to the directory containing your client build:*** This is only needed if serving css 
 embedded in your served response HTML, rather than links to external stylesheets. *See [below](#3-css-instead-of-stylesheets) 
@@ -270,12 +278,7 @@ Let's take a look at some examples:
 
 ## Webpack Configuration
 
-In addition to providing a plethora of options for rendering server-side requests, **Webpack Flush Chunks** has been made to be a complete and comprehensive solution to all the Webpack and Babel bundling/compilation strategies you might take. We got you covered. Let's examine our recommended Webpack configs for a variety of situations:
-
-
-## UNIVERSAL WEBPACK (CLIENT + SERVER):
-
-### Client Development
+***client:***
 ```js
 const ExtractCssChunks = require('extract-css-chunks-webpack-plugin')
 
@@ -304,8 +307,7 @@ module: {
   ]
 },
 plugins: [
-  new ExtractCssChunks,                     // key to producing CSS chunks -- see below!
-  // new webpack.NamedModulesPlugin(),      // only required if using moduleIds
+  new ExtractCssChunks,                     
   new webpack.optimize.CommonsChunkPlugin({
     names: ['bootstrap'],                   // notice there is no "bootstrap" named entry
     filename: '[name].js',
@@ -314,19 +316,12 @@ plugins: [
   ...
 ```
 
-When using `moduleIds`, the key element above is the `namedModulesPlugin` which insures the module IDs generated for your
-client bundle are the same for your server bundle (aka "deterministic"). 
-
-The `CommonsChunkPlugin` with a `"bootstrap"` entry ***which doesn't exist*** insures that a separate chunk is created just for webpack bootstrap code. 
+- The `CommonsChunkPlugin` with a `"bootstrap"` entry ***which does NOT in fact exist (notice there is no `entry` for it)*** insures that a separate chunk is created just for webpack bootstrap code. 
 This moves the webpack bootstrap code out of your `main` entry chunk so that it can also run before your dynamic
-chunks. Lastly, the `ExtractCssChunks` plugin insures CSS also gets multiple
-CSS files created. If you're familiar with how `extract-text-webpack-plugin` works, you will be right at home. Check out [extract-css-chunks-webpack-plugin](https://github.com/faceyspacey/extract-css-chunks-webpack-plugin) 
-to learn more.
+chunks. 
 
 
-
-
-### Server Development
+***server:***
 ```js
 module: {
   rules: [
@@ -349,276 +344,33 @@ module: {
   ]
 }
 plugins: [
-  // new webpack.NamedModulesPlugin(),          // only required if not using chunkNames
   new webpack.optimize.LimitChunkCountPlugin({
-    maxChunks: 1,                               // the server MUST only have one bundle file
+    maxChunks: 1,                               
   })
   ...
 ```
 
-The `LimitChunkCountPlugin` with `maxChunks: 1` insures only one file is generated for your server bundle
-so it can be run synchronously. And again `NamedModulesPlugin` insures module IDs with the same names
-as your client bundle are flushed. It's only needed when using `flushModuleIds`(), not `flushChunkNames()`.
-
-### Client Production
-```js
-// loaders + entries stay the same
-plugins: [
-  new require('stats-webpack-plugin')('stats.json'),  // VERY IMPORTANT! `flushChunks` consumes this
-  new ExtractCssChunks,
-  // new webpack.HashedModuleIdsPlugin(),             // don't expose file system in production bundle
-  new webpack.optimize.CommonsChunkPlugin({
-    names: ['bootstrap'],
-    filename: '[name].[chunkhash].js',
-    minChunks: Infinity
-  })
-  ...
-```
-
-In production `HashedModuleIdsPlugin` is used so that you don't expose your file system for the names
-of modules, as `NamedModulesPlugin` creates module IDs like: `'./src/Components/App.js'`. Again, it's
-not needed if you're flushing `chunkNames` directly.
-
-`stats-webpack-plugin` is instrumental in producing a `stats.json` file in your build directory, from
-which stats can be read in production. During development, this is done in code. See [how to get stats](#how-to-get-stats) below.
-
-### Server Production
-```js
-// loaders + entries stay the same
-plugins: [
-  // new webpack.HashedModuleIdsPlugin(),
-  new webpack.optimize.LimitChunkCountPlugin({
-    maxChunks: 1
-  }),
-  ...
-```
-
-One final note on `HashedModuleIdsPlugin` and `NamedModulesPlugin`. If you're using them, they obviously must match between the client and server.
-Both the client and server must have the same way to deterministically determine module ids/names, so they can be cross-referenced to determine
-which chunks to flush.
-
-
-## Webpack on the Client and Babel on The Server:
-
-Now, not all of you are using Webpack to compile your server code (although we recommend you do--see our 
-[nice universal webpack setup](#boilerplates) in our boilerplate section). So for those that are not, 
-here is the configs for your client bundles, and the solution we recommend for handling CSS on the server:
-
-
-*.babelrc*:
-```
-{
-  "presets": ["es2015", "react", "stage-2"],
-  "plugins": ["dynamic-import-webpack", [
-     "css-modules-transform", {
-       "generateScopedName": "[name]__[local]--[hash:base64:5]"
-     }
-  ]]
-}
-```
-
-**[babel-plugin-dynamic-import-webpack](https://github.com/airbnb/babel-plugin-dynamic-import-webpack)** is needed to transpile `import()` into Webpack's `require.ensure` on the server. It requires Babylon v6.12.0. It won't do anything without running within Webpack, but it guards against transpilation errors--and this is fine since components aren't imported asynchronously on the server.
-*Also note: if you're using a version of Webpack prior to 2.2.0 you also need this.* 
-
-
-More importantly, since you can't rely on webpack anymore to handle importing CSS, we recommend using 
-[babel-plugin-css-modules-transform](https://github.com/michalkvasnicak/babel-plugin-css-modules-transform) 
-to generate CSS class names on the server. What it does is take code like this:
-
-```js
-import styles from '../css/Foo.css'
-export default () => <div className={styles.box} />
-```
-
-and transpiles it to:
-
-```html
-<div class="../css/Foo__box--asdfe" />
-```
-*And it does so without creating CSS files, as that's handled by Webpack bundling the client code.* Your `generatedScopedName` (e.g. `"[name]__[local]--[hash:base64:5]"`) must match your
-`localIdentName` that you pass to Webpack's `css-loader`.
-
-Now that we are using this babel transform, pay close attention to how we must override its `.babelrc` in your client webpack config:
-
-### Client Development
-```js
-entry: [
-  path.resolve(__dirname, '../src/index.js')
-],
-module: {
-  rules: [
-    {
-      // when building the server with Babel, we must override babelrc
-      // since the babelrc powering Node on the server uses "css-modules-transform"
-      // which breaks/conflicts_with ExtractCssChunks + css-loader:
-      test: /\.js$/,
-      exclude: /node_modules/,
-      use: {
-        loader: 'babel-loader',
-        options: {
-          babelrc: false,
-          presets: ['es2015', 'react', 'stage-2'],
-          plugins: [
-            // 'dynamic-import-webpack' // only needed if  Webpack version < 2.2.0
-            // notice there is no 'css-modules-transform' plugin!
-          ]
-        }
-      }
-    },
-    {
-      test: /\.css$/,
-      use: ExtractCssChunks.extract({
-        use: {
-          loader: 'css-loader',         
-          options: {
-            modules: true,
-            localIdentName: '[name]__[local]--[hash:base64:5]'
-          }
-        }
-      })
-    }
-  ]
-},
-plugins: [
-  new ExtractCssChunks,
-  new webpack.optimize.CommonsChunkPlugin({
-    names: ['bootstrap'],
-    filename: '[name].js',
-    minChunks: Infinity
-  })
-  ...
-```
-
-### Client Production
-```js
-// loaders + entries stay the same
-plugins: [
-  new ExtractCssChunks,
-  new webpack.optimize.CommonsChunkPlugin({
-    names: ['bootstrap'],
-    filename: '[name].[chunkhash].js',
-    minChunks: Infinity,
-  }),
-  new StatsPlugin('stats.json'),
-  ...
-```
-
-> Note: hashed or named module plugins are never needed with Babel, as Babel paths are deterministically used instead.
-
-## How to Get Stats
-
-The general premise is to run your webpack compiler in code rather than from the command line. By doing so,
-you get access to your client bundle's stats in a callback. Let's go over both a Babel and a Webpack example:
-
-
-**Babel:**
-
-*server/index.js:*
-```js
-const DEV = process.env.NODE_ENV === 'development'
-const publicPath = clientConfig.output.publicPath
-const outputPath = clientConfig.output.path
-const app = express()
-
-if (DEV) {
-  const compiler = webpack(clientConfig)
-
-  app.use(webpackDevMiddleware(compiler, { publicPath }))
-  app.use(webpackHotMiddleware(compiler))
-
-  // where you get the stats during development:
-  compiler.plugin('done', stats => {
-    app.use(serverRender({ clientStats: stats.toJson(), outputPath }))
-  })
-}
-else {
-  const clientStats = require('../build/stats.json')
-
-  app.use(publicPath, express.static(outputPath))
-  app.use(serverRender({ clientStats, outputPath }))
-}
-```
-
-> **note:** a callback can be passed to `webpack(config, stats => ...)`, but it does not provide the complete set 
-of stats as the `done` plugin callback does. Do NOT use it!
-
-In this case `serverRender` is a function you call once with the stats that returns a function that 
-can be used by express on every request:
-
-*server/render.js:*
-```js
-export default stats => {
-  return (req, res, next) => {
-    const app = ReactDOMServer.renderToString(<App />)
-    const moduleIds = flushModuleIds()
-    const { Js Styles} = flushChunks(stats, {
-      moduleIds,
-      rootDir: path.join(__dirname, '..')
-    })
-    ...
-```
-
-**Webpack:**
-
-```js
-if (DEV) {
-  const multiCompiler = webpack([clientConfig, serverConfig])
-  const clientCompiler = multiCompiler.compilers[0]
-
-  app.use(webpackDevMiddleware(multiCompiler, { publicPath }))
-  app.use(webpackHotMiddleware(clientCompiler))
-
-  // the amazingly sick webpack-hot-server-middleware:
-  app.use(
-    // keeps serverRender updated with arg: { clientStats, outputPath }
-    webpackHotServerMiddleware(multiCompiler, {
-      serverRendererOptions: { outputPath }
-    })
-  )
-}
-else {
-  const clientStats = require('../buildClient/stats.json')
-  const serverRender = require('../buildServer/main.js').default
-
-  app.use(publicPath, express.static(outputPath))
-  app.use(serverRender({ clientStats, outputPath }))
-}
-```
-
-For Webpack, we use the amazingly awesome [webpack-hot-server-middleware](https://github.com/60frames/webpack-hot-server-middleware) by **@richardscarrott**. I can't recommend it enough. It's the most idiomatic (and fastest) approach to Hot Module Replacement on the server I've ever seen.
+- The `LimitChunkCountPlugin` with `maxChunks: 1` insures only one file is generated for your server bundle
+so it can be run synchronously.
 
 
 ## Externals
 If you're specifying externals to leave unbundled, you need to tell Webpack
-to still bundle `react-universal-component`, `webpack-flush-chunks` and
-`require-universal-module` so that they know they are running
-within Webpack. For example:
+to still bundle `react-universal-component` and `webpack-flush-chunks` so that they know they are running within Webpack. For example:
 
 ```js
 const externals = fs
   .readdirSync(modeModules)
-  .filter(x => !/\.bin|react-universal-component|require-universal-module|webpack-flush-chunks/.test(x))
+  .filter(x => !/\.bin|react-universal-component|webpack-flush-chunks/.test(x))
   .reduce((externals, mod) => {
     externals[mod] = `commonjs ${mod}`
     return externals
   }, {})
 ```
 
-## Boilerplates
-It should be clear by now that the main work in using `webpack-flush-chunks` is not in application code, but in setting up your
-webpack configs. It's therefore extremely important that you're armed with the precise boilerplates for the route you're taking. Here they are:
-
-- **[Universal Webpack Boilerplate](https://github.com/faceyspacey/flush-chunks-boilerplate-webpack)**
-- **[Universal Webpack Boilerplate (using chunkNames + magic comments)](https://github.com/faceyspacey/flush-chunks-boilerplate-webpack-chunknames)**
-- [Babel Boilerplate](https://github.com/faceyspacey/flush-chunks-boilerplate-babel)
-- [Babel Boilerplate (using chunkNames + magic comments)](https://github.com/faceyspacey/flush-chunks-boilerplate-babel-chunknames)
-
-After checking out the above boilerplates, clicking around their files, and running the different setups (development, production, babel server, etc), how to use *Webpack Flush Chunks* should make sense,
-and you should have a fool-proof place to start from.
-
-ONE FINAL TIME: clone & run the boilerplates before using this package!
 
 ## Low-level API: `flushFiles`
+
 For advanced users that want access to all files flushed (`.js`, `.css` or whatever else might be in there) and without named entry chunks you already know (such as `bootstrap`, `vendor`, and `main`), here you go:
 
 ```js
@@ -637,9 +389,23 @@ Keep in mind, you will have to get right placing these between your `bootstrap` 
 
 If what you want, instead of file names, is full-on compilation `chunk` objects (and any information it contains, which for 99% of most projects is unnecessary), create an issue and we'll add it. But until there is an actual need, we would like to keep the API simple.
 
+## Additional Docs
+- [How to get webpack stats](./docs/webpack-stats.md)
+- [using a babel server (not recommended)](./docs/babel-config.md)
+- [`flushModuleIds()` (legacy)](./docs/flush-module-ids.md)
+
+
+## Universal Demo
+🍾🍾🍾 **[faceyspacey/universal-demo](https://github.com/faceyspacey/universal-demo)** 🚀🚀🚀
+
+```js
+git clone https://github.com/faceyspacey/universal-demo.git
+cd universal-demo
+yarn
+yarn start
+```
 
 ## Contributing
-
 
 We use [commitizen](https://github.com/commitizen/cz-cli), so run `npm run cm` to make commits. A command-line form will appear, requiring you answer a few questions to automatically produce a nicely formatted commit. Releases, semantic version numbers, tags, changelogs and publishing to NPM will automatically be handled based on these commits thanks to [semantic-release](https://github.com/semantic-release/semantic-release). Be good.
 
@@ -653,4 +419,4 @@ Below is a screenshot of this module's tests running in [Wallaby](https://wallab
 ![webpack-flush-chunks wallaby tests screenshot](./tests-screenshot.png)
 
 ## More from FaceySpacey in Reactlandia
-- [redux-first-router](https://github.com/faceyspacey/redux-first-router). It's made to work perfectly with *Universal*. Together they comprise our *"frameworkless"* Redux-based approach to what Next.js does (splitting, SSR, prefetching, routing).
+- [redux-first-router](https://github.com/faceyspacey/redux-first-router). It's made to work perfectly with *Universal*. Together they comprise our *"frameworkless"* Redux-based approach to what Next.js does (splitting, SSR, prefetching, and routing). *People are lovin it by the way* 😎
