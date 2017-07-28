@@ -64,7 +64,7 @@ const flushChunks = (stats: Stats, isWebpack: boolean, opts: Options = {}) => {
   const jsBefore = filesFromChunks(beforeEntries, stats.assetsByChunkName)
 
   const files = opts.chunkNames
-    ? filesFromChunks(opts.chunkNames, stats.assetsByChunkName)
+    ? filesFromChunks(opts.chunkNames, stats.assetsByChunkName, true)
     : flush(opts.moduleIds || [], stats, opts.rootDir, isWebpack)
 
   const afterEntries = opts.after || defaults.after
@@ -191,9 +191,18 @@ const concatFilesAtKeys = (
 
 const filesFromChunks = (
   chunkNames: Files,
-  assetsByChunkName: FilesMap
+  assetsByChunkName: FilesMap,
+  checkChunkNames: boolean
 ): Files => {
-  const hasChunk = entry => !!assetsByChunkName[entry]
+  const hasChunk = entry => {
+    const result = !!assetsByChunkName[entry]
+    if (!result && checkChunkNames) {
+      console.warn(`[FLUSH CHUNKS]: Unable to find ${entry} in Webpack chunks. Please check usage of Babel plugin.`)
+    }
+
+    return result
+  }
+
   const entryToFiles = entry => assetsByChunkName[entry]
 
   return [].concat(...chunkNames.filter(hasChunk).map(entryToFiles))
