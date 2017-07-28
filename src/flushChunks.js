@@ -192,17 +192,17 @@ const concatFilesAtKeys = (
 const filesFromChunks = (
   chunkNames: Files,
   assetsByChunkName: FilesMap,
-  check: boolean
+  checkChunkNames: boolean
 ): Files => {
-  const hasChunk = entry => { 
+  const hasChunk = entry => {
     const result = !!assetsByChunkName[entry]
-    if (!result && checkChunkName) {
-      console.warn(`[FLUSH CHUNKS]: Unable to find ${entry} in Webpack chunks. Please check usage of Babel plugin.`)     
+    if (!result && checkChunkNames) {
+      console.warn(`[FLUSH CHUNKS]: Unable to find ${entry} in Webpack chunks. Please check usage of Babel plugin.`)
     }
-    
+
     return result
   }
-    
+
   const entryToFiles = entry => assetsByChunkName[entry]
 
   return [].concat(...chunkNames.filter(hasChunk).map(entryToFiles))
