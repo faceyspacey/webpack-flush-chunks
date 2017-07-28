@@ -192,7 +192,7 @@ const concatFilesAtKeys = (
 const filesFromChunks = (
   chunkNames: Files,
   assetsByChunkName: FilesMap,
-  checkChunkNames: boolean
+  checkChunkNames?: boolean
 ): Files => {
   const hasChunk = entry => {
     const result = !!assetsByChunkName[entry]
