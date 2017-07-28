@@ -41,7 +41,7 @@
 </p>
 
 <p align="center">
-🍾🍾🍾 <a href="https://github.com/faceyspacey/universal-demo)">GIT CLONE LOCAL DEMO</a> 🚀🚀🚀
+🍾🍾🍾 <a href="https://github.com/faceyspacey/universal-demo">GIT CLONE LOCAL DEMO</a> 🚀🚀🚀
 </p>
 
 <p align="center">
