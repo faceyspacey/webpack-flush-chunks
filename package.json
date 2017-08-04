@@ -45,7 +45,7 @@
     "react": "^15.5.4",
     "rimraf": "^2.6.1",
     "semantic-release": "^6.3.2",
-    "travis-github-status": "^1.4.0"
+    "travis-github-status": "^1.6.3"
   },
   "peerDependencies": {
     "react": "*"

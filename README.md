@@ -41,7 +41,7 @@
 </p>
 
 <p align="center">
-🍾🍾🍾 <a href="https://github.com/faceyspacey/universal-demo)">GIT CLONE LOCAL DEMO</a> 🚀🚀🚀
+🍾🍾🍾 <a href="https://github.com/faceyspacey/universal-demo">GIT CLONE LOCAL DEMO</a> 🚀🚀🚀
 </p>
 
 <p align="center">
@@ -381,6 +381,8 @@ const externals = fs
   }, {})
 ```
 
+## AutoDllPlugin
+Since the webpack plugin API does not yet allow you to add to stats, the [AutoDllPlugin cannot add chunks to stats](https://github.com/asfktz/autodll-webpack-plugin/issues/23). Therefore you have to embed its corresponding script manually. 
 
 ## Low-level API: `flushFiles`
 
