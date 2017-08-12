@@ -88,3 +88,5 @@ The following is an older boilerplate that will showcase babel being used with c
 - https://github.com/faceyspacey/flush-chunks-boilerplate-babel-chunknames
 
 We highly recommend you checkout. We aren't promoting this route, but you can definitely learn from how its configured. Specifically how the server babel config is different from the client webpack config. Check the `.babelrc` and the webpack configs.
+
+
