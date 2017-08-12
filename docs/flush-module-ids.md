@@ -41,3 +41,11 @@ plugins: [
 Now both the client and server bundles have the same IDs! [@richardscarrot](https://github.com/richardscarrott) came up with this technique by the way!
 
 > NOTE: in production you don't want to expose your file system like the `NamedModulesPlugin` does so you use generated hashes for IDs instead.
+
+## Boilerplates to Learn From
+We have some older boilerplates that we aren't promoting/maintaining, but will showcase the core configuration hurdles using `moduleIds` instead of `chunkNames` being solved. 
+
+- https://github.com/faceyspacey/flush-chunks-boilerplate-babel
+- https://github.com/faceyspacey/flush-chunks-boilerplate-webpack
+
+If this is the route you plan to take, definitely check these out, as their configuration still applies.
