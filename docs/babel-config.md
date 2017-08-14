@@ -6,15 +6,16 @@ When using babel for the server, you'll have slightly different webpack config a
 ```
 {
   "presets": ["es2015", "react", "stage-2"],
-  "plugins": ["syntax-dynamic-import", "universal-import", [
+  "plugins": ["syntax-dynamic-import", [
+    "universal-import", {
+      "babelServer": true
+    }], [
      "css-modules-transform", {
        "generateScopedName": "[name]__[local]--[hash:base64:5]"
      }
   ]]
 }
 ```
-
-- **[babel-plugin-syntax-dynamic-import](https://github.com/babel/babel/tree/master/packages/babel-plugin-syntax-dynamic-import)** is needed so `import()` doesn't break the Babel compilation.
 
 - For CSS Modules, since you can't rely on webpack anymore to handle importing CSS, we recommend using 
 [babel-plugin-css-modules-transform](https://github.com/michalkvasnicak/babel-plugin-css-modules-transform) 
@@ -52,7 +53,7 @@ module: {
           babelrc: false,
           presets: ['es2015', 'react', 'stage-2'],
           plugins: [
-            // 'dynamic-import-webpack' // only needed if  Webpack version < 2.2.0
+            'universal-import' // notice there is no babelServer: true option
             // notice there is no 'css-modules-transform' plugin!
           ]
         }
@@ -87,6 +88,6 @@ The following is an older boilerplate that will showcase babel being used with c
 
 - https://github.com/faceyspacey/flush-chunks-boilerplate-babel-chunknames
 
-We aren't promoting this route anymore, but you can definitely learn from how its configured. Specifically how the server babel config is different from the client webpack config. Check the `.babelrc` and the webpack configs. Just keep in mind that with the babel plugin u gotta use `babel-plugin-syntax-dynamic-import` as well, as shown at the top of this doc.
+We aren't promoting this route anymore, but you can definitely learn from how its configured. Specifically how the server babel config is different from the babel config within the *client webpack config*. Check the `.babelrc` and the webpack configs.
 
 
