@@ -16,7 +16,7 @@ When using babel for the server, you'll have slightly different webpack config a
   ]]
 }
 ```
-
+- you gotta pass the `babelServer: true` option to the `universal-import` plugin *(in the client webpack config, you will use the regular plugin as you will see below)*
 - For CSS Modules, since you can't rely on webpack anymore to handle importing CSS, we recommend using 
 [babel-plugin-css-modules-transform](https://github.com/michalkvasnicak/babel-plugin-css-modules-transform) 
 to generate CSS class names on the server. What it does is take code like this:
