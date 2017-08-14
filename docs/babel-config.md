@@ -6,7 +6,7 @@ When using babel for the server, you'll have slightly different webpack config a
 ```
 {
   "presets": ["es2015", "react", "stage-2"],
-  "plugins": ["syntax-dynamic-import", [
+  "plugins": [[
     "universal-import", {
       "babelServer": true
     }], [
