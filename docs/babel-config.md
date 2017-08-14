@@ -6,7 +6,7 @@ When using babel for the server, you'll have slightly different webpack config a
 ```
 {
   "presets": ["es2015", "react", "stage-2"],
-  "plugins": ["dynamic-import-webpack", [
+  "plugins": ["syntax-dynamic-import", "universal-import", [
      "css-modules-transform", {
        "generateScopedName": "[name]__[local]--[hash:base64:5]"
      }
@@ -14,8 +14,8 @@ When using babel for the server, you'll have slightly different webpack config a
 }
 ```
 
-- **[babel-plugin-dynamic-import-webpack](https://github.com/airbnb/babel-plugin-dynamic-import-webpack)** is needed to transpile `import()` into Webpack's `require.ensure` on the server. It requires Babylon v6.12.0. It won't do anything without running within Webpack, but it guards against transpilation errors--and this is fine since components aren't imported asynchronously on the server.
-*Also note: if you're using a version of Webpack prior to 2.2.0 you also need this.* 
+- **[babel-plugin-syntax-dynamic-import](https://github.com/babel/babel/tree/master/packages/babel-plugin-syntax-dynamic-import)** is needed so `import()` doesn't break the Babel compilation.
+
 - For CSS Modules, since you can't rely on webpack anymore to handle importing CSS, we recommend using 
 [babel-plugin-css-modules-transform](https://github.com/michalkvasnicak/babel-plugin-css-modules-transform) 
 to generate CSS class names on the server. What it does is take code like this:
@@ -83,10 +83,10 @@ plugins: [
 ```
 
 ## Sample Boilerplate
-The following is an older boilerplate that will showcase babel being used with chunknames:
+The following is an older boilerplate that will showcase babel being used with chunknames *(without babel-plugin-universal-import)*:
 
 - https://github.com/faceyspacey/flush-chunks-boilerplate-babel-chunknames
 
-We highly recommend you checkout. We aren't promoting this route, but you can definitely learn from how its configured. Specifically how the server babel config is different from the client webpack config. Check the `.babelrc` and the webpack configs.
+We aren't promoting this route anymore, but you can definitely learn from how its configured. Specifically how the server babel config is different from the client webpack config. Check the `.babelrc` and the webpack configs. Just keep in mind that with the babel plugin u gotta use `babel-plugin-syntax-dynamic-import` as well, as shown at the top of this doc.
 
 
