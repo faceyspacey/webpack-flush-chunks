@@ -203,7 +203,7 @@ const filesFromChunks = (
     return result
   }
 
-  const entryToFiles = entry => assets[entry]|| assets[entry + '-']
+  const entryToFiles = entry => assets[entry] || assets[entry + '-']
 
   return [].concat(...chunkNames.filter(hasChunk).map(entryToFiles))
 }
