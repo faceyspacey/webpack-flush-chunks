@@ -1,7 +1,5 @@
-// @flow
-
 export const isWebpack = () => typeof __webpack_require__ !== 'undefined'
-export const requireReactWeakly = (): ?any => {
+export const requireReactWeakly = () => {
   if (!isWebpack()) {
     return module.require('react')
   }
