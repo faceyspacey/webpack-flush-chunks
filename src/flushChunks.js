@@ -1,42 +1,10 @@
 // @flow
 import type { Api, CssChunksHash } from './createApiWithCss'
+import type { Stats, Options } from './flushFiles'
 import createApiWithCss from './createApiWithCss'
 import { filesFromChunks, flush } from './flushFiles'
 
 declare function __webpack_require__(id: string): any
-
-type Files = Array<string>
-
-export type FilesMap = {
-  [key: string]: Array<string>
-}
-
-type Chunk = {
-  id: number,
-  files: Array<string>
-}
-
-type Module = {
-  id: string,
-  name: string,
-  chunks: Array<number>
-}
-
-export type Stats = {
-  assetsByChunkName: FilesMap,
-  chunks: Array<Chunk>,
-  modules: Array<Module>,
-  publicPath: string
-}
-
-type Options = {
-  moduleIds?: Files,
-  chunkNames?: Files,
-  before?: Array<string>,
-  after?: Array<string>,
-  rootDir?: string,
-  outputPath?: string
-}
 
 const IS_WEBPACK = typeof __webpack_require__ !== 'undefined'
 const IS_TEST = process.env.NODE_ENV === 'test'

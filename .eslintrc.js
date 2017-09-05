@@ -27,7 +27,8 @@ module.exports = {
     test: true,
     it: true,
     expect: true,
-    beforeEach: true
+    beforeEach: true,
+    __webpack_require__: true
   },
   'import/resolver': {
     node: {

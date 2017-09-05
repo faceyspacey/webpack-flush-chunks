@@ -1,6 +1,6 @@
 // @flow
-import React from 'react'
 import fs from 'fs'
+import { requireReactWeakly } from './utils'
 
 import type { Stats, FilesMap } from './flushChunks'
 
@@ -48,24 +48,30 @@ export default (
   const api = {
     // 1) Use as React components using ReactDOM.renderToStaticMarkup, eg:
     // <html><Styles /><Js /><html>
-    Js: () => (
-      <span>
-        {scripts.map((file, key) => (
-          <script
-            type='text/javascript'
-            src={`${publicPath}/${file}`}
-            key={key}
-          />
-        ))}
-      </span>
-    ),
-    Styles: () => (
-      <span>
-        {stylesheets.map((file, key) => (
-          <link rel='stylesheet' href={`${publicPath}/${file}`} key={key} />
-        ))}
-      </span>
-    ),
+    Js: () => {
+      const React = requireReactWeakly()
+      return (
+        <span>
+          {scripts.map((file, key) => (
+            <script
+              type='text/javascript'
+              src={`${publicPath}/${file}`}
+              key={key}
+            />
+          ))}
+        </span>
+      )
+    },
+    Styles: () => {
+      const React = requireReactWeakly()
+      return (
+        <span>
+          {stylesheets.map((file, key) => (
+            <link rel='stylesheet' href={`${publicPath}/${file}`} key={key} />
+          ))}
+        </span>
+      )
+    },
 
     // 2) Use as string, eg: `${styles} ${js}`
     js: {
@@ -89,18 +95,22 @@ export default (
     // 3) Embed the raw css without needing to load another file.
     // Use as a React component (<Css />) or a string (`${css}`):
     // NOTE: during development, HMR requires stylesheets.
-    Css: () =>
-      (DEV
-        ? api.Styles()
-        : <span>
+    Css: () => {
+      const React = requireReactWeakly()
+      return DEV ? (
+        api.Styles()
+      ) : (
+        <span>
           <style>{stylesAsString(stylesheets, outputPath)}</style>
-        </span>),
+        </span>
+      )
+    },
     css: {
       toString: () =>
         // lazy-loaded in case not used
-        (DEV
+        DEV
           ? api.styles.toString()
-          : `<style>${stylesAsString(stylesheets, outputPath)}</style>`)
+          : `<style>${stylesAsString(stylesheets, outputPath)}</style>`
     },
 
     // 4) names of files without publicPath or outputPath prefixed:
@@ -113,15 +123,20 @@ export default (
 
     // 6) special goodness for dual-file import()
     cssHashRaw,
-    CssHash: () => (
-      <script
-        type='text/javascript'
-        dangerouslySetInnerHTML={{ __html: JSON.stringify(cssHashRaw) }}
-      />
-    ),
+    CssHash: () => {
+      const React = requireReactWeakly()
+      return (
+        <script
+          type='text/javascript'
+          dangerouslySetInnerHTML={{ __html: JSON.stringify(cssHashRaw) }}
+        />
+      )
+    },
     cssHash: {
       toString: () =>
-        `<script type='text/javascript'>window.__CSS_CHUNKS__= ${JSON.stringify(cssHashRaw)}</script>`
+        `<script type='text/javascript'>window.__CSS_CHUNKS__= ${JSON.stringify(
+          cssHashRaw
+        )}</script>`
     }
   }
 

@@ -1,18 +1,18 @@
 // @flow
 declare function __webpack_require__(id: string): any
 
-type Files = Array<string>
+export type Files = Array<string>
 
 export type FilesMap = {
   [key: string]: Array<string>
 }
 
-type Chunk = {
+export type Chunk = {
   id: number,
   files: Array<string>
 }
 
-type Module = {
+export type Module = {
   id: string,
   name: string,
   chunks: Array<number>
@@ -25,7 +25,7 @@ export type Stats = {
   publicPath: string
 }
 
-type Options = {
+export type Options = {
   moduleIds?: Files,
   chunkNames?: Files,
   before?: Array<string>,
@@ -34,7 +34,7 @@ type Options = {
   outputPath?: string
 }
 
-type Options2 = {
+export type Options2 = {
   moduleIds?: Files,
   chunkNames?: Files,
   rootDir?: string,
