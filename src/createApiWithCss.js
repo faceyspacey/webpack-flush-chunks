@@ -128,7 +128,9 @@ export default (
       return (
         <script
           type='text/javascript'
-          dangerouslySetInnerHTML={{ __html: JSON.stringify(cssHashRaw) }}
+          dangerouslySetInnerHTML={{
+            __html: `window.__CSS_CHUNKS__ = ${JSON.stringify(cssHashRaw)}`
+          }}
         />
       )
     },
