@@ -2,7 +2,7 @@
 import fs from 'fs'
 import { requireReactWeakly } from './utils'
 
-import type { Stats, FilesMap } from './flushChunks'
+import type { Stats, FilesMap } from './flushFiles'
 
 export type CssChunksHash = {
   [key: string]: string
