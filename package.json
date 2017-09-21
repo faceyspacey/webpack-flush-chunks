@@ -44,7 +44,7 @@
     "prettier": "^1.2.2",
     "react": "^15.5.4",
     "rimraf": "^2.6.1",
-    "semantic-release": "^6.3.2",
+    "semantic-release": "^8.0.3",
     "travis-github-status": "^1.6.3"
   },
   "peerDependencies": {
