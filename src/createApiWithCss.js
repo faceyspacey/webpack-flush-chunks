@@ -55,6 +55,7 @@ export default (
             type='text/javascript'
             src={`${publicPath}/${file}`}
             key={key}
+            defer
           />
         ))}
       </span>
@@ -74,7 +75,7 @@ export default (
         scripts
           .map(
             file =>
-              `<script type='text/javascript' src='${publicPath}/${file}'></script>`
+              `<script type='text/javascript' src='${publicPath}/${file}' defer></script>`
           )
           .join('\n')
     },
