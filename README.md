@@ -275,7 +275,7 @@ const {
 
   // cssHash for use with babel-plugin-dual-import
   cssHashRaw, // hash object of chunk names to css file paths
-  cssHash,    // string: <script>window.__CSS_CHUNKS__ = ${JSON.stringify(cssHashRw)}</script>
+  cssHash,    // string: <script>window.__CSS_CHUNKS__ = ${JSON.stringify(cssHashRaw)}</script>
   CssHash,    // react component of above
 
   // important paths:
