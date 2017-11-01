@@ -8,7 +8,7 @@ export type CssChunksHash = {
   [key: string]: string
 }
 
-type StatelessComponent = () => React.Element<*>
+type StatelessComponent = () => React$Element<*>
 type ObjectString = {
   toString: () => string
 }
