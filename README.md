@@ -245,8 +245,7 @@ your universal component flushes. Typically you have just a `main` chunk, and if
 as that's the default.
 
 - **outputPath** - ***absolute path to the directory containing your client build:*** This is only needed if serving css 
-embedded in your served response HTML, rather than links to external stylesheets. *See [below](#3-css-instead-of-stylesheets) 
-for how to do this.* It's needed to determine where in the file system to find the CSS that needs to be extract into
+embedded in your served response HTML, rather than links to external stylesheets. I.e. if you are using the `Css` and `css` values in the `return API` described in the next section. It's needed to determine where in the file system to find the CSS that needs to be extract into
 an in-memory string. Keep in mind if you're rendering the server with Webpack, filesystem paths may not match up, so it's important
 to accurately pass the `outputPath` to your `serverRender` method. We recommend to do this by running your server 
 express/koa/hapi/etc code via Babel and then by requiring your Webpack server bundle into it. 
