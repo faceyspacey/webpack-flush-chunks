@@ -42,7 +42,7 @@
     "jest": "^20.0.4",
     "lint-staged": "^3.4.0",
     "prettier": "^1.2.2",
-    "react": "^15.5.4",
+    "react": "^16.1.0",
     "rimraf": "^2.6.1",
     "semantic-release": "^6.3.2",
     "travis-github-status": "^1.6.3"
