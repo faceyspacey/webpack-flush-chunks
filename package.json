@@ -3,6 +3,7 @@
   "version": "0.0.0-placeholder",
   "description": "flush webpack chunks for SSR from React Loadable or similar packages",
   "main": "dist/flushChunks.js",
+  "typings": "index.d.ts",
   "author": "James Gillmore <james@faceyspacey.com>",
   "license": "MIT",
   "scripts": {
