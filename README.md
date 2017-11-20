@@ -24,10 +24,6 @@
     <img src="https://lima.codeclimate.com/github/faceyspacey/webpack-flush-chunks/badges/coverage.svg" alt="Coverage Status"/>
   </a>
 
-  <a href="https://greenkeeper.io">
-    <img src="https://badges.greenkeeper.io/faceyspacey/webpack-flush-chunks.svg" alt="Green Keeper" />
-  </a>
-
   <a href="https://lima.codeclimate.com/github/faceyspacey/webpack-flush-chunks">
     <img src="https://lima.codeclimate.com/github/faceyspacey/webpack-flush-chunks/badges/gpa.svg" alt="GPA" />
   </a>
