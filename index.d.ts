@@ -40,7 +40,7 @@ declare module 'webpack-flush-chunks' {
     stylesheets: string[];
 
     /** Hash object of chunk names to CSS file paths */
-    cssHashRaw: Recrod<string, string>;
+    cssHashRaw: Record<string, string>;
 
     /** `<script>window.__CSS_CHUNKS__ = ${JSON.stringify(cssHashRaw)}</script>` */
     cssHash: string[];
