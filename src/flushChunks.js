@@ -23,6 +23,7 @@ type Module = {
 
 export type Stats = {
   assetsByChunkName: FilesMap,
+  namedChunkGroups: FilesMap,
   chunks: Array<Chunk>,
   modules: Array<Module>,
   publicPath: string
@@ -61,14 +62,27 @@ export default (stats: Stats, opts: Options): Api =>
 
 const flushChunks = (stats: Stats, isWebpack: boolean, opts: Options = {}) => {
   const beforeEntries = opts.before || defaults.before
-  const jsBefore = filesFromChunks(beforeEntries, stats.assetsByChunkName)
+  const jsBefore = filesFromChunks(
+    beforeEntries,
+    stats.assetsByChunkName,
+    stats.namedChunkGroups
+  )
 
   const files = opts.chunkNames
-    ? filesFromChunks(opts.chunkNames, stats.assetsByChunkName, true)
+    ? filesFromChunks(
+        opts.chunkNames,
+        stats.assetsByChunkName,
+        stats.namedChunkGroups,
+        true
+      )
     : flush(opts.moduleIds || [], stats, opts.rootDir, isWebpack)
 
   const afterEntries = opts.after || defaults.after
-  const jsAfter = filesFromChunks(afterEntries, stats.assetsByChunkName)
+  const jsAfter = filesFromChunks(
+    afterEntries,
+    stats.assetsByChunkName,
+    stats.namedChunkGroups
+  )
 
   return createApiWithCss(
     [...jsBefore, ...files, ...jsAfter],
@@ -87,7 +101,11 @@ const flushFiles = (stats: Stats, opts: Options2) =>
 
 const flushFilesPure = (stats: Stats, isWebpack: boolean, opts: Options2) => {
   const files = opts.chunkNames
-    ? filesFromChunks(opts.chunkNames, stats.assetsByChunkName)
+    ? filesFromChunks(
+        opts.chunkNames,
+        stats.assetsByChunkName,
+        stats.namedChunkGroups
+      )
     : flush(opts.moduleIds || [], stats, opts.rootDir, isWebpack)
 
   const filter = opts.filter
@@ -192,20 +210,31 @@ const concatFilesAtKeys = (
 const filesFromChunks = (
   chunkNames: Files,
   assets: FilesMap,
+  assetsByChunkName: FilesMap,
   checkChunkNames?: boolean
 ): Files => {
   const hasChunk = entry => {
-    const result = !!(assets[entry] || assets[entry + '-'])
+    const result = !!(assets[entry] || assets[`${entry}-`])
     if (!result && checkChunkNames) {
-      console.warn(`[FLUSH CHUNKS]: Unable to find ${entry} in Webpack chunks. Please check usage of Babel plugin.`)
+      console.warn(
+        `[FLUSH CHUNKS]: Unable to find ${entry} in Webpack chunks. Please check usage of Babel plugin.`
+      )
     }
 
     return result
   }
 
-  const entryToFiles = entry => assets[entry] || assets[entry + '-']
+  const filesByChunkName = name => {
+    if (!assetsByChunkName || !assetsByChunkName[name]) {
+      return name
+    }
+    return assetsByChunkName[name].chunks
+  }
 
-  return [].concat(...chunkNames.filter(hasChunk).map(entryToFiles))
+  const entryToFiles = entry => assets[entry] || assets[`${entry}-`]
+  const chunksToResolve = chunkNames.filter(hasChunk).map(filesByChunkName)
+  const chunksWithAssets = [].concat(...chunksToResolve)
+  return [].concat(...chunksWithAssets.filter(isUnique).map(entryToFiles))
 }
 
 /** EXPORTS FOR TESTS */
