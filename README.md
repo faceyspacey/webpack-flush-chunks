@@ -10,7 +10,6 @@
 # Webpack Flush Chunks
 
 
-
 <p align="center">
   <a href="https://www.npmjs.com/package/webpack-flush-chunks">
     <img src="https://img.shields.io/npm/v/webpack-flush-chunks.svg" alt="Version" />
@@ -40,6 +39,9 @@
 <p align="center">
 🍾🍾🍾 <a href="https://github.com/faceyspacey/universal-demo">GIT CLONE LOCAL DEMO</a> 🚀🚀🚀
 </p>
+
+> **Now supports Webpack 4 aggressive code splitting**
+We have updated `webpack-flush-chunks` to now support more complex code splitting! `webpack-flush-chunks` enables developers to leverage smarter and less wasteful chunking methods avaliable to developers inside of Webpack.
 
 <p align="center">
   <img src="./poo.jpg" height="350" />
@@ -71,6 +73,58 @@ res.send(`
 `)
 ```
 
+## Webpack 4 Aggressive Code Splitting Support
+
+This plugin allows for complex code splitting to be leveraged for improved caching and less code duplication!
+
+#### Before:
+Before this update, developers were limited to a single chunk stratagey. What the stratagey did was give developers a similar chunk method to `CommonsChunkPlugin` that was used in Webpack 3. We did not support `AggressiveSplittingPlugin` 
+
+```js
+    optimization: {
+        runtimeChunk: {
+            name: 'bootstrap'
+        },
+        splitChunks: {
+            chunks: 'initial',
+            cacheGroups: {
+                vendors: {
+                    test: /[\\/]node_modules[\\/]/,
+                    name: 'vendor'
+                }
+            }
+        }
+    },
+```
+#### After:
+Now you can use many flexible code splitting methods, like the one below. Webpack encourages aggressive code splitting methods, so we jumped on the bandwagon and did the upgrades. Just like before, we use the chunkNames generated - then we can look within the Webpack 4 chunk graph and resolve any other dependencies or automatically generated chunks that consist as part of the initial chunk. 
+
+We can load the nested chunks in the correct order as required and if many chunks share a common chunk, we ensure they load in the correct order, so that vendor chunks are always available to all chunks depending on them without creating any duplicate requests or chunk calls. 
+
+```js
+    optimization: {
+        splitChunks: {
+            chunks: 'async',
+            minSize: 30000,
+            minChunks: 1,
+            maxAsyncRequests: 5,
+            maxInitialRequests: 3,
+            automaticNameDelimiter: '~',
+            name: true,
+            cacheGroups: {
+                vendors: {
+                    test: /[\\/]node_modules[\\/]/,
+                    priority: -10
+                },
+                default: {
+                    minChunks: 2,
+                    priority: -20,
+                    reuseExistingChunk: true
+                }
+            }
+        }
+    }
+```
 The code has been cracked for while now for Server Side Rendering and Code-Splitting *individually*. Accomplishing both *simultaneously* has been an impossibility without jumping through major hoops or using a *framework*, specifically Next.js. Our tools are for "power users" that prefer the *frameworkless* approach.
 
 *Webpack Flush Chunks* is essentially the backend to universal rendering components like [React Universal Component](https://github.com/faceyspacey/react-universal-component). It works with any "universal" component/module that buffers a list of `moduleIds` or `chunkNames` evaluated. 
