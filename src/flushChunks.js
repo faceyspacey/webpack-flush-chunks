@@ -62,27 +62,18 @@ export default (stats: Stats, opts: Options): Api =>
 
 const flushChunks = (stats: Stats, isWebpack: boolean, opts: Options = {}) => {
   const beforeEntries = opts.before || defaults.before
-  const jsBefore = filesFromChunks(
-    beforeEntries,
-    stats.assetsByChunkName,
-    stats.namedChunkGroups
-  )
+  const { assetsByChunkName, namedChunkGroups } = stats
+  const ffc = (assets, isWebpack = false) =>
+    filesFromChunks(assets, assetsByChunkName, namedChunkGroups, isWebpack)
+
+  const jsBefore = ffc(beforeEntries)
 
   const files = opts.chunkNames
-    ? filesFromChunks(
-        opts.chunkNames,
-        stats.assetsByChunkName,
-        stats.namedChunkGroups,
-        true
-      )
+    ? ffc(opts.chunkNames, true)
     : flush(opts.moduleIds || [], stats, opts.rootDir, isWebpack)
 
   const afterEntries = opts.after || defaults.after
-  const jsAfter = filesFromChunks(
-    afterEntries,
-    stats.assetsByChunkName,
-    stats.namedChunkGroups
-  )
+  const jsAfter = ffc(afterEntries)
 
   return createApiWithCss(
     [...jsBefore, ...files, ...jsAfter],
