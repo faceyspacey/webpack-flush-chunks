@@ -62,9 +62,7 @@ export default (stats: Stats, opts: Options): Api =>
 
 const flushChunks = (stats: Stats, isWebpack: boolean, opts: Options = {}) => {
   const beforeEntries = opts.before || defaults.before
-  const { assetsByChunkName, namedChunkGroups } = stats
-  const ffc = (assets, isWebpack = false) =>
-    filesFromChunks(assets, assetsByChunkName, namedChunkGroups, isWebpack)
+  const ffc = (assets, isWebpack) => filesFromChunks(assets, stats, isWebpack)
 
   const jsBefore = ffc(beforeEntries)
 
@@ -92,11 +90,7 @@ const flushFiles = (stats: Stats, opts: Options2) =>
 
 const flushFilesPure = (stats: Stats, isWebpack: boolean, opts: Options2) => {
   const files = opts.chunkNames
-    ? filesFromChunks(
-        opts.chunkNames,
-        stats.assetsByChunkName,
-        stats.namedChunkGroups
-      )
+    ? filesFromChunks(opts.chunkNames, stats)
     : flush(opts.moduleIds || [], stats, opts.rootDir, isWebpack)
 
   const filter = opts.filter
@@ -181,6 +175,17 @@ const createFilesByModuleId = (stats: Stats): FilesMap => {
   }, {})
 }
 
+const findChunkById = ({ chunks }) => {
+  if (!chunks) {
+    return {}
+  }
+  const filesByChunk = chunks.reduce((chunks, chunk) => {
+    chunks[chunk.id] = chunk.files
+    return chunks
+  }, {})
+  return filesByChunk
+}
+
 /** HELPERS */
 
 const isUnique = (v: string, i: number, self: Files): boolean =>
@@ -198,11 +203,12 @@ const concatFilesAtKeys = (
     []
   )
 
-const filesByChunkName = (name, assetsByChunkName) => {
-  if (!assetsByChunkName || !assetsByChunkName[name]) {
+const filesByChunkName = (name, namedChunkGroups) => {
+  if (!namedChunkGroups || !namedChunkGroups[name]) {
     return [name]
   }
-  return assetsByChunkName[name].chunks
+
+  return namedChunkGroups[name].chunks
 }
 
 const hasChunk = (entry, assets, checkChunkNames) => {
@@ -218,21 +224,19 @@ const hasChunk = (entry, assets, checkChunkNames) => {
 
 const chunksToResolve = ({
   chunkNames,
-  assetsByChunkName,
-  assets,
+  stats,
   checkChunkNames
 }: {
   chunkNames: Files,
-  assets: FilesMap,
-  assetsByChunkName: Object,
+  stats: Object,
   checkChunkNames?: boolean
 }): Array<string> =>
   chunkNames
     .reduce((names, name) => {
-      if (!hasChunk(name, assets, checkChunkNames)) {
+      if (!hasChunk(name, stats.assetsByChunkName, checkChunkNames)) {
         return names
       }
-      const files = filesByChunkName(name, assetsByChunkName)
+      const files = filesByChunkName(name, stats.namedChunkGroups)
       names.push(...files)
       return names
     }, [])
@@ -240,19 +244,27 @@ const chunksToResolve = ({
 
 const filesFromChunks = (
   chunkNames: Files,
-  assets: FilesMap,
-  assetsByChunkName: Object,
+  stats: Object,
   checkChunkNames?: boolean
 ): Files => {
-  const entryToFiles = entry => assets[entry] || assets[`${entry}-`]
+  const chunksByID = findChunkById(stats)
+
+  const entryToFiles = entry => {
+    if (typeof entry === 'number') {
+      return chunksByID[entry]
+    }
+    return (
+      stats.assetsByChunkName[entry] || stats.assetsByChunkName[`${entry}-`]
+    )
+  }
+
   const chunksWithAssets = chunksToResolve({
     chunkNames,
-    assetsByChunkName,
-    assets,
+    stats,
     checkChunkNames
   })
 
-  return [].concat(...chunksWithAssets.map(entryToFiles))
+  return [].concat(...chunksWithAssets.map(entryToFiles)).filter(chunk => chunk)
 }
 
 /** EXPORTS FOR TESTS */
