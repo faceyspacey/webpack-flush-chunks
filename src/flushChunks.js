@@ -147,16 +147,17 @@ const flushWebpack = (ids: Files, stats: Stats): Files => {
 }
 
 /** CREATE FILES MAP */
-
-const createFilesByPath = ({ chunks, modules }: Stats): FilesMap => {
-  const filesByChunk = chunks.reduce((chunks, chunk) => {
+const filesByChunk = chunks =>
+  chunks.reduce((chunks, chunk) => {
     chunks[chunk.id] = chunk.files
     return chunks
   }, {})
 
+const createFilesByPath = ({ chunks, modules }: Stats): FilesMap => {
+  const chunkedFiles = filesByChunk(chunks)
   return modules.reduce((filesByPath, module) => {
     const filePath = module.name
-    const files = concatFilesAtKeys(filesByChunk, module.chunks)
+    const files = concatFilesAtKeys(chunkedFiles, module.chunks)
 
     filesByPath[filePath] = files.filter(isUnique)
     return filesByPath
@@ -179,11 +180,7 @@ const findChunkById = ({ chunks }) => {
   if (!chunks) {
     return {}
   }
-  const filesByChunk = chunks.reduce((chunks, chunk) => {
-    chunks[chunk.id] = chunk.files
-    return chunks
-  }, {})
-  return filesByChunk
+  return filesByChunk(chunks)
 }
 
 /** HELPERS */
