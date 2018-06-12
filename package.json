@@ -5,6 +5,9 @@
   "main": "dist/flushChunks.js",
   "typings": "index.d.ts",
   "author": "James Gillmore <james@faceyspacey.com>",
+  "contributors": [
+    "Zack Jackson <zackary.l.jackson@gmail.com>"
+  ],
   "license": "MIT",
   "scripts": {
     "build": "babel src -d dist",

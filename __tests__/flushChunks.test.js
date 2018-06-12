@@ -229,7 +229,7 @@ describe('unit tests', () => {
       bootstrap: ['bootstrap.js'],
       main: ['main.js', 'main.css']
     }
-    const outputFiles = filesFromChunks(entryNames, assetsByChunkName)
+    const outputFiles = filesFromChunks(entryNames, { assetsByChunkName })
 
     expect(outputFiles).toEqual(['bootstrap.js', 'main.js', 'main.css'])
   })

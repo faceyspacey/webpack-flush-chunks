@@ -10,7 +10,6 @@
 # Webpack Flush Chunks
 
 
-
 <p align="center">
   <a href="https://www.npmjs.com/package/webpack-flush-chunks">
     <img src="https://img.shields.io/npm/v/webpack-flush-chunks.svg" alt="Version" />
@@ -39,7 +38,11 @@
 
 <p align="center">
 🍾🍾🍾 <a href="https://github.com/faceyspacey/universal-demo">GIT CLONE LOCAL DEMO</a> 🚀🚀🚀
+  <br> Webpack 4 demo update in progress
 </p>
+
+> **Now supports Webpack 4 aggressive code splitting**
+We have updated `webpack-flush-chunks` to now support more complex code splitting! `webpack-flush-chunks` enables developers to leverage smarter and less wasteful chunking methods avaliable to developers inside of Webpack.
 
 <p align="center">
   <img src="./poo.jpg" height="350" />
@@ -52,7 +55,7 @@ import { flushChunkNames } from 'react-universal-component/server'
 import flushChunks from 'webpack-flush-chunks'
 
 const app = ReactDOMServer.renderToString(<App />)
-const { js, styles, cssHash } = flushChunks(webpackStats, {
+const { js, styles } = flushChunks(webpackStats, {
   chunkNames: flushChunkNames()
 })
 
@@ -64,13 +67,65 @@ res.send(`
     </head>
     <body>
       <div id="root">${app}</div>
-      ${cssHash}
       ${js}
     </body>
   </html>
 `)
 ```
 
+## Webpack 4 Aggressive Code Splitting Support
+
+This plugin allows for complex code splitting to be leveraged for improved caching and less code duplication!
+Below are two examples of well tested splitting configurations. If you experience any issues with bespoke optimization configurations, we would love to hear about it!
+
+#### Before:
+Before this update, developers were limited to a single chunk stratagey. What the stratagey did was give developers a similar chunk method to `CommonsChunkPlugin` that was used in Webpack 3. We did not support `AggressiveSplittingPlugin` 
+
+```js
+    optimization: {
+        runtimeChunk: {
+            name: 'bootstrap'
+        },
+        splitChunks: {
+            chunks: 'initial',
+            cacheGroups: {
+                vendors: {
+                    test: /[\\/]node_modules[\\/]/,
+                    name: 'vendor'
+                }
+            }
+        }
+    },
+```
+#### After:
+Now you can use many flexible code splitting methods, like the one below. Webpack encourages aggressive code splitting methods, so we jumped on the bandwagon and did the upgrades. Just like before, we use the chunkNames generated - then we can look within the Webpack 4 chunk graph and resolve any other dependencies or automatically generated chunks that consist as part of the initial chunk. 
+
+We can load the nested chunks in the correct order as required and if many chunks share a common chunk, we ensure they load in the correct order, so that vendor chunks are always available to all chunks depending on them without creating any duplicate requests or chunk calls. 
+
+```js
+    optimization: {
+        splitChunks: {
+            chunks: 'async',
+            minSize: 30000,
+            minChunks: 1,
+            maxAsyncRequests: 5,
+            maxInitialRequests: 3,
+            automaticNameDelimiter: '~',
+            name: true,
+            cacheGroups: {
+                vendors: {
+                    test: /[\\/]node_modules[\\/]/,
+                    priority: -10
+                },
+                default: {
+                    minChunks: 2,
+                    priority: -20,
+                    reuseExistingChunk: true
+                }
+            }
+        }
+    }
+```
 The code has been cracked for while now for Server Side Rendering and Code-Splitting *individually*. Accomplishing both *simultaneously* has been an impossibility without jumping through major hoops or using a *framework*, specifically Next.js. Our tools are for "power users" that prefer the *frameworkless* approach.
 
 *Webpack Flush Chunks* is essentially the backend to universal rendering components like [React Universal Component](https://github.com/faceyspacey/react-universal-component). It works with any "universal" component/module that buffers a list of `moduleIds` or `chunkNames` evaluated. 
@@ -101,11 +156,12 @@ yarn add --dev babel-plugin-universal-import extract-css-chunks-webpack-plugin
 ```
 - ***[Babel Plugin Universal Import](https://github.com/faceyspacey/babel-plugin-universal-import)*** is used to make `react-universal-component` as frictionless as possible. It removes the need to provide additional options to insure synchronous rendering happens on the server and on the client on initial load. These packages aren't required, but usage as frictionless as possible.
 
-- ***[Extract Css Chunks Webpack Plugin](https://github.com/faceyspacey/extract-css-chunks-webpack-plugin)*** is another companion package made to complete the CSS side of the code-splitting dream. It uses the `cssHash` string to asynchronously request CSS assets as part of a "dual import" when calling `import()`. 
+- ***[Extract Css Chunks Webpack Plugin](https://github.com/faceyspacey/extract-css-chunks-webpack-plugin)*** is another companion package made to complete the CSS side of the code-splitting dream. Its also a standalone plugin thats great for codesplitting css, with **built-in HMR**
 
 
 
-*If you like to move fast, git clone the [universal-demo](https://github.com/faceyspacey/universal-demo)*.
+ ~~*If you like to move fast, git clone the [universal-demo](https://github.com/faceyspacey/universal-demo)*.~~ We are working on a Webpack 4 demo
+
 
 ## How It Works
 
@@ -142,14 +198,6 @@ Before we examine how to use `flushChunks/flushFiles`, let's take a look at the 
 
   <!-- after entry chunks -->
   <script type='text/javascript' src='/static/main.js'></script>
-
-  <!-- stylsheets that will be requested when import() is called -->
-  <script>
-    window.__CSS_CHUNKS__ = {
-      Foo: '/static/Foo.css',
-      Bar: '/static/Bar.css'
-    }
-  </script>
 </body>
 ```
 
@@ -191,7 +239,7 @@ import flushChunks from 'webpack-flush-chunks'
 
 const app = ReactDOMServer.renderToString(<App />)
 const chunkNames = flushChunkNames()
-const { js, styles, cssHash } = flushChunks(stats, { chunkNames })
+const { js, styles } = flushChunks(stats, { chunkNames })
 
 res.send(`
   <!doctype html>
@@ -201,7 +249,6 @@ res.send(`
     </head>
     <body>
       <div id="root">${app}</div>
-      ${cssHash}
       ${js}
     </body>
   </html>
@@ -223,22 +270,22 @@ flushChunks(stats, {
 })
 ```
 
-
 - **chunkNames** - ***array of chunks flushed from `react-universal-component`
 
-- **before** - ***array of named entries that come BEFORE your dynamic chunks:*** A typical 
+- **before** - ***array of named entries that come BEFORE your dynamic chunks:*** ~~A typical 
 pattern is to create a `vendor` chunk. A better strategy is to create a `vendor` and a `bootstrap` chunk. The "bootstrap"
 chunk is a name provided to the `CommonsChunkPlugin` which has no entry point specified for it. The plugin by default removes 
 webpack bootstrap code from the named `vendor` common chunk and puts it in the `bootstrap` chunk. This is a common pattern because
 the webpack bootstrap code has info about the chunks/modules used in your bundle and is likely to change, which means to cache
 your `vendor` chunk you need to extract the bootstrap code into its own small chunk file. If this is new to you, don't worry.
-[Below](#webpack-configuration) you will find examples for exactly how to specify your Webpack config. Lastly, you do not need to 
-provide this option if you have a `bootstrap` chunk, or `vendor` chunk or both, as those are the defaults.
+[Below](#webpack-configuration) you will find examples for exactly how to specify your Webpack config. Lastly, you do not need to provide this option if you have a `bootstrap` chunk, or `vendor` chunk or both, as those are the defaults.~~
+
+Mostly related to Webpack 2 & 3. It is still very useful if you need to load a specific chunk name **first** `webpack-flush-chunks` now can rely on a better chunk graph provided by Webpack 4 - chunks are loaded in the correct order with more autonomy.
 
 - **after** - ***array of named entries that come AFTER your dynamic chunks:*** 
-Similar to `before`, `after` contains an array of chunks you want to come after the dynamic chunks that
+~~Similar to `before`, `after` contains an array of chunks you want to come after the dynamic chunks that
 your universal component flushes. Typically you have just a `main` chunk, and if that's the case, you can ignore this option,
-as that's the default.
+as that's the default.~~
 
 - **outputPath** - ***absolute path to the directory containing your client build:*** This is only needed if serving css 
 embedded in your served response HTML, rather than links to external stylesheets. I.e. if you are using the `Css` and `css` values in the `return API` described in the next section. It's needed to determine where in the file system to find the CSS that needs to be extract into
@@ -303,31 +350,22 @@ module: {
     },
     {
       test: /\.css$/,
-      use: ExtractCssChunks.extract({
-        use: {
-          loader: 'css-loader',
-          options: {
-            modules: true,
-            localIdentName: '[name]__[local]--[hash:base64:5]'
-          }
+      use: [
+       ExtractCssChunks.loader,
+       {
+        loader: 'css-loader',
+        options: {
+          modules: true,
+          localIdentName: '[name]__[local]--[hash:base64:5]'
         }
-      })
+      ]
     }
   ]
 },
 plugins: [
-  new ExtractCssChunks,                     
-  new webpack.optimize.CommonsChunkPlugin({
-    names: ['bootstrap'],                   // notice there is no "bootstrap" named entry
-    filename: '[name].js',
-    minChunks: Infinity
-  })
+  new ExtractCssChunks(),                     
   ...
 ```
-
-- The `CommonsChunkPlugin` with a `"bootstrap"` entry ***which does NOT in fact exist (notice there is no `entry` for it)*** insures that a separate chunk is created just for webpack bootstrap code. 
-This moves the webpack bootstrap code out of your `main` entry chunk so that it can also run before your dynamic
-chunks. 
 
 
 ***server:***
@@ -392,7 +430,7 @@ const chunkNames = flushChunkNames()
 const scripts = flushFiles(stats, { chunkNames, filter: 'js' })
 const styles = flushFiles(stats, { chunkNames, filter: 'css' })
 ```
-> i.e. this will get you all files corresponding to flushed "dynamic" chunks, not `main`, `vendor`, etc. 
+> i.e. this will get you all files corresponding to flushed "dynamic" chunks.
 
 The only thing different with the API is that it has a `filter` option, and that it doesn't have `before`, `after` and `outputPath` options. The `filter` can be a file extension as a string, a regex, or a function: `filter: file => file.endsWith('js')`.
 

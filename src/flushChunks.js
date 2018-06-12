@@ -22,7 +22,8 @@ type Module = {
 }
 
 export type Stats = {
-  assetsByChunkName: FilesMap,
+  assetsByChunkName: Object,
+  namedChunkGroups: FilesMap,
   chunks: Array<Chunk>,
   modules: Array<Module>,
   publicPath: string
@@ -61,14 +62,16 @@ export default (stats: Stats, opts: Options): Api =>
 
 const flushChunks = (stats: Stats, isWebpack: boolean, opts: Options = {}) => {
   const beforeEntries = opts.before || defaults.before
-  const jsBefore = filesFromChunks(beforeEntries, stats.assetsByChunkName)
+  const ffc = (assets, isWebpack) => filesFromChunks(assets, stats, isWebpack)
+
+  const jsBefore = ffc(beforeEntries)
 
   const files = opts.chunkNames
-    ? filesFromChunks(opts.chunkNames, stats.assetsByChunkName, true)
+    ? ffc(opts.chunkNames, true)
     : flush(opts.moduleIds || [], stats, opts.rootDir, isWebpack)
 
   const afterEntries = opts.after || defaults.after
-  const jsAfter = filesFromChunks(afterEntries, stats.assetsByChunkName)
+  const jsAfter = ffc(afterEntries)
 
   return createApiWithCss(
     [...jsBefore, ...files, ...jsAfter],
@@ -87,7 +90,7 @@ const flushFiles = (stats: Stats, opts: Options2) =>
 
 const flushFilesPure = (stats: Stats, isWebpack: boolean, opts: Options2) => {
   const files = opts.chunkNames
-    ? filesFromChunks(opts.chunkNames, stats.assetsByChunkName)
+    ? filesFromChunks(opts.chunkNames, stats)
     : flush(opts.moduleIds || [], stats, opts.rootDir, isWebpack)
 
   const filter = opts.filter
@@ -144,16 +147,17 @@ const flushWebpack = (ids: Files, stats: Stats): Files => {
 }
 
 /** CREATE FILES MAP */
-
-const createFilesByPath = ({ chunks, modules }: Stats): FilesMap => {
-  const filesByChunk = chunks.reduce((chunks, chunk) => {
+const filesByChunk = chunks =>
+  chunks.reduce((chunks, chunk) => {
     chunks[chunk.id] = chunk.files
     return chunks
   }, {})
 
+const createFilesByPath = ({ chunks, modules }: Stats): FilesMap => {
+  const chunkedFiles = filesByChunk(chunks)
   return modules.reduce((filesByPath, module) => {
     const filePath = module.name
-    const files = concatFilesAtKeys(filesByChunk, module.chunks)
+    const files = concatFilesAtKeys(chunkedFiles, module.chunks)
 
     filesByPath[filePath] = files.filter(isUnique)
     return filesByPath
@@ -170,6 +174,13 @@ const createFilesByModuleId = (stats: Stats): FilesMap => {
     filesByModuleId[id] = filesByPath[filePath]
     return filesByModuleId
   }, {})
+}
+
+const findChunkById = ({ chunks }) => {
+  if (!chunks) {
+    return {}
+  }
+  return filesByChunk(chunks)
 }
 
 /** HELPERS */
@@ -189,23 +200,68 @@ const concatFilesAtKeys = (
     []
   )
 
-const filesFromChunks = (
-  chunkNames: Files,
-  assets: FilesMap,
-  checkChunkNames?: boolean
-): Files => {
-  const hasChunk = entry => {
-    const result = !!(assets[entry] || assets[entry + '-'])
-    if (!result && checkChunkNames) {
-      console.warn(`[FLUSH CHUNKS]: Unable to find ${entry} in Webpack chunks. Please check usage of Babel plugin.`)
-    }
-
-    return result
+const filesByChunkName = (name, namedChunkGroups) => {
+  if (!namedChunkGroups || !namedChunkGroups[name]) {
+    return [name]
   }
 
-  const entryToFiles = entry => assets[entry] || assets[entry + '-']
+  return namedChunkGroups[name].chunks
+}
 
-  return [].concat(...chunkNames.filter(hasChunk).map(entryToFiles))
+const hasChunk = (entry, assets, checkChunkNames) => {
+  const result = !!(assets[entry] || assets[`${entry}-`])
+  if (!result && checkChunkNames) {
+    console.warn(
+      `[FLUSH CHUNKS]: Unable to find ${entry} in Webpack chunks. Please check usage of Babel plugin.`
+    )
+  }
+
+  return result
+}
+
+const chunksToResolve = ({
+  chunkNames,
+  stats,
+  checkChunkNames
+}: {
+  chunkNames: Files,
+  stats: Object,
+  checkChunkNames?: boolean
+}): Array<string> =>
+  chunkNames
+    .reduce((names, name) => {
+      if (!hasChunk(name, stats.assetsByChunkName, checkChunkNames)) {
+        return names
+      }
+      const files = filesByChunkName(name, stats.namedChunkGroups)
+      names.push(...files)
+      return names
+    }, [])
+    .filter(isUnique)
+
+const filesFromChunks = (
+  chunkNames: Files,
+  stats: Object,
+  checkChunkNames?: boolean
+): Files => {
+  const chunksByID = findChunkById(stats)
+
+  const entryToFiles = entry => {
+    if (typeof entry === 'number') {
+      return chunksByID[entry]
+    }
+    return (
+      stats.assetsByChunkName[entry] || stats.assetsByChunkName[`${entry}-`]
+    )
+  }
+
+  const chunksWithAssets = chunksToResolve({
+    chunkNames,
+    stats,
+    checkChunkNames
+  })
+
+  return [].concat(...chunksWithAssets.map(entryToFiles)).filter(chunk => chunk)
 }
 
 /** EXPORTS FOR TESTS */
