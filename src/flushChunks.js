@@ -74,7 +74,7 @@ const flushChunks = (stats: Stats, isWebpack: boolean, opts: Options = {}) => {
   const jsAfter = ffc(afterEntries)
 
   return createApiWithCss(
-    [...jsBefore, ...files, ...jsAfter],
+    [...jsBefore, ...files, ...jsAfter].filter(isUnique),
     [
       ...jsBefore, // likely nothing in here, but if so: bootstrap.css, vendor.css, etc
       ...jsAfter.reverse(), // main.css, someElseYouPutBeforeMain.css, etc
