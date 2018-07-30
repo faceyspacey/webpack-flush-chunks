@@ -1,6 +1,11 @@
 declare module 'webpack-flush-chunks' {
   import { Stats } from 'webpack';
 
+  // lazy-loading wrapper around the string outputs, in case they are not used.
+  interface LazyLoadedString {
+    toString: () => string;
+  }
+
   export default function flushChunks(
     stats: Stats,
     options: {
@@ -25,13 +30,13 @@ declare module 'webpack-flush-chunks' {
     Css: React.Component<{}>;
 
     /** JavaScript chunks */
-    js: string[];
+    js: LazyLoadedString;
 
     /** External stylesheets */
-    styles: string[];
+    styles: LazyLoadedString;
 
     /** raw CSS */
-    css: string[];
+    css: LazyLoadedString;
 
     /** Array of filenames */
     scripts: string[];
@@ -43,12 +48,12 @@ declare module 'webpack-flush-chunks' {
     cssHashRaw: Record<string, string>;
 
     /** `<script>window.__CSS_CHUNKS__ = ${JSON.stringify(cssHashRaw)}</script>` */
-    cssHash: string[];
+    cssHash: LazyLoadedString;
 
     /** `<script>window.__CSS_CHUNKS__ = ${JSON.stringify(cssHashRaw)}</script>` as a React component */
     CssHash: React.Component<{}>;
 
     publicPath: string;
-    outputPath: string;
+    outputPath?: string;
   };
 }
