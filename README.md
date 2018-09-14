@@ -79,7 +79,7 @@ This plugin allows for complex code splitting to be leveraged for improved cachi
 Below are two examples of well tested splitting configurations. If you experience any issues with bespoke optimization configurations, we would love to hear about it!
 
 #### Before:
-Before this update, developers were limited to a single chunk stratagey. What the stratagey did was give developers a similar chunk method to `CommonsChunkPlugin` that was used in Webpack 3. We did not support `AggressiveSplittingPlugin` 
+Before this update, developers were limited to a single chunk strategy. What the strategy did was give developers a similar chunk method to `CommonsChunkPlugin` that was used in Webpack 3. We did not support `AggressiveSplittingPlugin` 
 
 ```js
     optimization: {
