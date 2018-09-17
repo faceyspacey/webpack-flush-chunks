@@ -200,16 +200,21 @@ const concatFilesAtKeys = (
     []
   )
 
-const filesByChunkName = (name, namedChunkGroups) => {
-  if (!namedChunkGroups || !namedChunkGroups[name]) {
+const filesByChunkName = (name, stats) => {
+  const groups = stats.namedChunkGroups
+  const chunks = stats.assetsByChunkName
+  if (!groups || !groups[name] || !chunks || chunks[name]) {
     return [name]
   }
 
-  return namedChunkGroups[name].chunks
+  return groups[name].chunks || chunks[name].chunks
 }
 
 const hasChunk = (entry, assets, checkChunkNames) => {
-  const result = !!(assets[entry] || assets[`${entry}-`])
+  const groups = assets.namedChunkGroups
+  const chunks = assets.assetsByChunkName
+
+  const result = !!(groups[entry] || groups[`${entry}-`] || chunks[entry])
   if (!result && checkChunkNames) {
     console.warn(
       `[FLUSH CHUNKS]: Unable to find ${entry} in Webpack chunks. Please check usage of Babel plugin.`
@@ -230,10 +235,10 @@ const chunksToResolve = ({
 }): Array<string> =>
   chunkNames
     .reduce((names, name) => {
-      if (!hasChunk(name, stats.assetsByChunkName, checkChunkNames)) {
+      if (!hasChunk(name, stats, checkChunkNames)) {
         return names
       }
-      const files = filesByChunkName(name, stats.namedChunkGroups)
+      const files = filesByChunkName(name, stats)
       names.push(...files)
       return names
     }, [])
