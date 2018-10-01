@@ -9,7 +9,8 @@ import {
   isUnique,
   normalizePath,
   concatFilesAtKeys,
-  filesFromChunks
+  filesFromChunks,
+  chunksToResolve
 } from '../src/flushChunks'
 
 import {
@@ -19,6 +20,8 @@ import {
   webpackModuleIds,
   chunkNames
 } from '../__fixtures__/stats'
+
+import webpackStats from '../__fixtures__/realstats'
 
 /** PUBLIC API */
 
@@ -232,5 +235,43 @@ describe('unit tests', () => {
     const outputFiles = filesFromChunks(entryNames, { assetsByChunkName })
 
     expect(outputFiles).toEqual(['bootstrap.js', 'main.js', 'main.css'])
+  })
+
+  test('chunksToResolve()', () => {
+    const shouldBe = [
+      'static/css/components/Home.css',
+      'static/js/components/Home.js',
+      'static/css/components/Home.css.map',
+      'static/js/components/Home.js.map'
+    ]
+
+    const resolved = chunksToResolve({
+      chunkNames: ['components/Home'],
+      stats: webpackStats,
+      checkChunkNames: false
+    })
+    console.log(`resolved:${JSON.stringify(resolved, null, 2)}`)
+    expect(shouldBe).toEqual(resolved)
+  })
+
+  test('filesFromChunksRenamed()', () => {
+    const shouldBe = [
+      'static/css/components/Home.css',
+      'static/js/components/Home.js',
+      'static/css/components/Home.css.map',
+      'static/js/components/Home.js.map'
+    ]
+    const outputFiles = filesFromChunks(['components/Home'], webpackStats, true)
+    console.log(
+      `++++++++++\n\noutputFiles:${JSON.stringify(outputFiles, null, 2)} --- ${outputFiles} =======\n\n`
+    )
+    expect(shouldBe).toEqual(outputFiles)
+  })
+
+  test('flushChunks()', () => {
+    const { js, styles, cssHash } = flushChunks(webpackStats, true, {
+      chunkNames: ['components/Home']
+    })
+    console.log(`js:${JSON.stringify(js)} --- ${js}`)
   })
 })

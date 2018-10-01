@@ -73,10 +73,10 @@ export default (
       toString: () =>
         // lazy-loaded in case not used
         scripts
-          .map(
-            file =>
-              `<script type='text/javascript' src='${publicPath}/${file}' defer></script>`
-          )
+          .map(file => {
+            console.log(`in 'js', file: ${file}`)
+            return `<script type='text/javascript' src='${publicPath}/${file}' defer></script>`
+          })
           .join('\n')
     },
     styles: {
@@ -134,6 +134,7 @@ export default (
 /** HELPERS */
 
 export const getJsFileRegex = (files: Array<string>): RegExp => {
+  console.log(`in getJsFileRegex, files:${files}`)
   const isUsingExtractCssChunk = !!files.find(file => file.includes('no_css'))
   return isUsingExtractCssChunk ? /\.no_css\.js$/ : /\.js$/
 }

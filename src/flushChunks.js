@@ -70,8 +70,12 @@ const flushChunks = (stats: Stats, isWebpack: boolean, opts: Options = {}) => {
     ? ffc(opts.chunkNames, true)
     : flush(opts.moduleIds || [], stats, opts.rootDir, isWebpack)
 
+  console.log(`jsBefore:${jsBefore}`)
+  console.log(`files:${files}`)
+
   const afterEntries = opts.after || defaults.after
   const jsAfter = ffc(afterEntries)
+  console.log(`jsAfter:${jsAfter}`)
 
   return createApiWithCss(
     [...jsBefore, ...files, ...jsAfter].filter(isUnique),
@@ -200,12 +204,20 @@ const concatFilesAtKeys = (
     []
   )
 
+// const filesByChunkName = (name, namedChunkGroups) => {
+//   if (!namedChunkGroups || !namedChunkGroups[name]) {
+//     name = name.replace('/', '-')
+//     return [name]
+//   }
+
+//   return namedChunkGroups[name].chunks.map(chunk => chunk.replace('/', '-'))
+// }
+
 const filesByChunkName = (name, namedChunkGroups) => {
   if (!namedChunkGroups || !namedChunkGroups[name]) {
-    return [name]
+    return [name].assets
   }
-
-  return namedChunkGroups[name].chunks
+  return namedChunkGroups[name].assets
 }
 
 const hasChunk = (entry, assets, checkChunkNames) => {
@@ -244,15 +256,20 @@ const filesFromChunks = (
   stats: Object,
   checkChunkNames?: boolean
 ): Files => {
-  const chunksByID = findChunkById(stats)
+  const chunksByID = findChunkById(stats) // TODO:
 
   const entryToFiles = entry => {
     if (typeof entry === 'number') {
       return chunksByID[entry]
     }
-    return (
-      stats.assetsByChunkName[entry] || stats.assetsByChunkName[`${entry}-`]
-    )
+    // return (
+    //   stats.assetsByChunkName[entry] || stats.assetsByChunkName[`${entry}-`]
+    // )
+
+    const chunkOfAssets = stats.assets.filter(asset => asset.name === entry)
+    const chunk = chunkOfAssets[0].chunks[0]
+
+    return stats.assetsByChunkName[chunk]
   }
 
   const chunksWithAssets = chunksToResolve({
@@ -261,7 +278,9 @@ const filesFromChunks = (
     checkChunkNames
   })
 
-  return [].concat(...chunksWithAssets.map(entryToFiles)).filter(chunk => chunk)
+  const filesByAsset = new Set(...chunksWithAssets.map(entryToFiles))
+
+  return [...filesByAsset]
 }
 
 /** EXPORTS FOR TESTS */
@@ -278,5 +297,6 @@ export {
   isUnique,
   normalizePath,
   concatFilesAtKeys,
-  filesFromChunks
+  filesFromChunks,
+  chunksToResolve
 }
