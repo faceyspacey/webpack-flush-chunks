@@ -79,7 +79,7 @@ const flushChunks = (stats: Stats, isWebpack: boolean, opts: Options = {}) => {
       ...jsBefore, // likely nothing in here, but if so: bootstrap.css, vendor.css, etc
       ...jsAfter.reverse(), // main.css, someElseYouPutBeforeMain.css, etc
       ...files // correct incrementing order already
-    ],
+    ].filter(isUnique),
     stats,
     opts.outputPath
   )
