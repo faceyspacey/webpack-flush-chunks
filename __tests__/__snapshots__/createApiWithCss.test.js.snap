@@ -1,7 +1,7 @@
 // Jest Snapshot v1, https://goo.gl/fbAQLP
 
 exports[`createApiWithCss() generates js + style components, strings and arrays 1`] = `
-<span>
+<Unknown>
   <script
     defer={true}
     src="/static/0.js"
@@ -12,11 +12,11 @@ exports[`createApiWithCss() generates js + style components, strings and arrays 
     src="/static/main.js"
     type="text/javascript"
   />
-</span>
+</Unknown>
 `;
 
 exports[`createApiWithCss() generates js + style components, strings and arrays 2`] = `
-<span>
+<Unknown>
   <link
     href="/static/main.css"
     rel="stylesheet"
@@ -25,18 +25,18 @@ exports[`createApiWithCss() generates js + style components, strings and arrays 
     href="/static/0.css"
     rel="stylesheet"
   />
-</span>
+</Unknown>
 `;
 
 exports[`createApiWithCss() generates js + style components, strings and arrays 3`] = `
-<span>
+<Unknown>
   <style>
     /Users/jamesgillmore/App/build/main.css- the css! 
     
     /Users/jamesgillmore/App/build/0.css- the css! 
     
   </style>
-</span>
+</Unknown>
 `;
 
 exports[`createApiWithCss() generates js + style components, strings and arrays 4`] = `
@@ -71,31 +71,31 @@ Array [
 `;
 
 exports[`createApiWithCss() uses files with extension "no_css.js" if available 1`] = `
-<span>
+<Unknown>
   <script
     defer={true}
     src="/static/main.no_css.js"
     type="text/javascript"
   />
-</span>
+</Unknown>
 `;
 
 exports[`createApiWithCss() uses files with extension "no_css.js" if available 2`] = `
-<span>
+<Unknown>
   <link
     href="/static/main.css"
     rel="stylesheet"
   />
-</span>
+</Unknown>
 `;
 
 exports[`createApiWithCss() uses files with extension "no_css.js" if available 3`] = `
-<span>
+<Unknown>
   <style>
     /Users/jamesgillmore/App/build/main.css- the css! 
     
   </style>
-</span>
+</Unknown>
 `;
 
 exports[`createApiWithCss() uses files with extension "no_css.js" if available 4`] = `"<script type='text/javascript' src='/static/main.no_css.js' defer></script>"`;

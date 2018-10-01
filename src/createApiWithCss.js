@@ -49,7 +49,7 @@ export default (
     // 1) Use as React components using ReactDOM.renderToStaticMarkup, eg:
     // <html><Styles /><Js /><html>
     Js: () => (
-      <span>
+      <React.Fragment>
         {scripts.map((file, key) => (
           <script
             type='text/javascript'
@@ -58,14 +58,14 @@ export default (
             defer
           />
         ))}
-      </span>
+      </React.Fragment>
     ),
     Styles: () => (
-      <span>
+      <React.Fragment>
         {stylesheets.map((file, key) => (
           <link rel='stylesheet' href={`${publicPath}/${file}`} key={key} />
         ))}
-      </span>
+      </React.Fragment>
     ),
 
     // 2) Use as string, eg: `${styles} ${js}`
@@ -91,17 +91,19 @@ export default (
     // Use as a React component (<Css />) or a string (`${css}`):
     // NOTE: during development, HMR requires stylesheets.
     Css: () =>
-      (DEV
-        ? api.Styles()
-        : <span>
+      DEV ? (
+        api.Styles()
+      ) : (
+        <React.Fragment>
           <style>{stylesAsString(stylesheets, outputPath)}</style>
-        </span>),
+        </React.Fragment>
+      ),
     css: {
       toString: () =>
         // lazy-loaded in case not used
-        (DEV
+        DEV
           ? api.styles.toString()
-          : `<style>${stylesAsString(stylesheets, outputPath)}</style>`)
+          : `<style>${stylesAsString(stylesheets, outputPath)}</style>`
     },
 
     // 4) names of files without publicPath or outputPath prefixed:
@@ -124,7 +126,9 @@ export default (
     ),
     cssHash: {
       toString: () =>
-        `<script type='text/javascript'>window.__CSS_CHUNKS__= ${JSON.stringify(cssHashRaw)}</script>`
+        `<script type='text/javascript'>window.__CSS_CHUNKS__= ${JSON.stringify(
+          cssHashRaw
+        )}</script>`
     }
   }
 
@@ -149,7 +153,7 @@ export const stylesAsString = (
 ): string => {
   if (!outputPath) {
     throw new Error(
-      `No \`outputPath\` was provided as an option to \`flushChunks\`. 
+      `No \`outputPath\` was provided as an option to \`flushChunks\`.
       Please provide one so stylesheets can be read from the
       file system since you're embedding the css as a string.`
     )
