@@ -75,7 +75,7 @@ export default (
         scripts
           .map(
             file =>
-              `<script type='text/javascript' src='${publicPath}/${file}' defer></script>`
+              `<script type='text/javascript' src='${publicPath}/${file}' defer='defer'></script>`
           )
           .join('\n')
     },
@@ -91,17 +91,19 @@ export default (
     // Use as a React component (<Css />) or a string (`${css}`):
     // NOTE: during development, HMR requires stylesheets.
     Css: () =>
-      (DEV
-        ? api.Styles()
-        : <span>
+      DEV ? (
+        api.Styles()
+      ) : (
+        <span>
           <style>{stylesAsString(stylesheets, outputPath)}</style>
-        </span>),
+        </span>
+      ),
     css: {
       toString: () =>
         // lazy-loaded in case not used
-        (DEV
+        DEV
           ? api.styles.toString()
-          : `<style>${stylesAsString(stylesheets, outputPath)}</style>`)
+          : `<style>${stylesAsString(stylesheets, outputPath)}</style>`
     },
 
     // 4) names of files without publicPath or outputPath prefixed:
@@ -124,7 +126,9 @@ export default (
     ),
     cssHash: {
       toString: () =>
-        `<script type='text/javascript'>window.__CSS_CHUNKS__= ${JSON.stringify(cssHashRaw)}</script>`
+        `<script type='text/javascript'>window.__CSS_CHUNKS__= ${JSON.stringify(
+          cssHashRaw
+        )}</script>`
     }
   }
 
@@ -149,7 +153,7 @@ export const stylesAsString = (
 ): string => {
   if (!outputPath) {
     throw new Error(
-      `No \`outputPath\` was provided as an option to \`flushChunks\`. 
+      `No \`outputPath\` was provided as an option to \`flushChunks\`.
       Please provide one so stylesheets can be read from the
       file system since you're embedding the css as a string.`
     )

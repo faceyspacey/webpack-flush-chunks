@@ -40,8 +40,8 @@ exports[`createApiWithCss() generates js + style components, strings and arrays 
 `;
 
 exports[`createApiWithCss() generates js + style components, strings and arrays 4`] = `
-"<script type='text/javascript' src='/static/0.js' defer></script>
-<script type='text/javascript' src='/static/main.js' defer></script>"
+"<script type='text/javascript' src='/static/0.js' defer='defer'></script>
+<script type='text/javascript' src='/static/main.js' defer='defer'></script>"
 `;
 
 exports[`createApiWithCss() generates js + style components, strings and arrays 5`] = `
@@ -98,7 +98,7 @@ exports[`createApiWithCss() uses files with extension "no_css.js" if available 3
 </span>
 `;
 
-exports[`createApiWithCss() uses files with extension "no_css.js" if available 4`] = `"<script type='text/javascript' src='/static/main.no_css.js' defer></script>"`;
+exports[`createApiWithCss() uses files with extension "no_css.js" if available 4`] = `"<script type='text/javascript' src='/static/main.no_css.js' defer='defer'></script>"`;
 
 exports[`createApiWithCss() uses files with extension "no_css.js" if available 5`] = `"<link rel='stylesheet' href='/static/main.css' />"`;
 
