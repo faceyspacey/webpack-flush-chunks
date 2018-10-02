@@ -51,7 +51,7 @@ let filesByModuleId = null
 const IS_WEBPACK = typeof __webpack_require__ !== 'undefined'
 const IS_TEST = process.env.NODE_ENV === 'test'
 const defaults = {
-  before: ['bootstrap', 'vendor'],
+  before: [],
   after: ['main']
 }
 
@@ -74,7 +74,7 @@ const flushChunks = (stats: Stats, isWebpack: boolean, opts: Options = {}) => {
   const jsAfter = ffc(afterEntries)
 
   return createApiWithCss(
-    [...jsBefore, ...files, ...jsAfter].filter(isUnique),
+    [...jsBefore, ...files, ...jsAfter],
     [
       ...jsBefore, // likely nothing in here, but if so: bootstrap.css, vendor.css, etc
       ...jsAfter.reverse(), // main.css, someElseYouPutBeforeMain.css, etc
@@ -211,10 +211,12 @@ const filesByChunkName = (name, stats) => {
 }
 
 const hasChunk = (entry, assets, checkChunkNames) => {
-  const groups = assets.namedChunkGroups
-  const chunks = assets.assetsByChunkName
-
-  const result = !!(groups[entry] || groups[`${entry}-`] || chunks[entry])
+  const groups = assets.namedChunkGroups || {}
+  const chunks = assets.assetsByChunkName || {}
+  const result = !!(groups[entry] ||
+    groups[`${entry}-`] ||
+    chunks[entry] ||
+    chunks[`${entry}-`])
   if (!result && checkChunkNames) {
     console.warn(
       `[FLUSH CHUNKS]: Unable to find ${entry} in Webpack chunks. Please check usage of Babel plugin.`
@@ -239,6 +241,7 @@ const chunksToResolve = ({
         return names
       }
       const files = filesByChunkName(name, stats)
+
       names.push(...files)
       return names
     }, [])

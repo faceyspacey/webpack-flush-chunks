@@ -23,8 +23,6 @@ Object {
   "outputPath": undefined,
   "publicPath": "/static",
   "scripts": Array [
-    "bootstrap.no_css.js",
-    "vendor.no_css.js",
     "0.no_css.js",
     "1.no_css.js",
     "main.no_css.js",
@@ -63,8 +61,6 @@ Object {
   "outputPath": undefined,
   "publicPath": "/static",
   "scripts": Array [
-    "bootstrap.no_css.js",
-    "vendor.no_css.js",
     "0.no_css.js",
     "1.no_css.js",
     "2.no_css.js",
@@ -146,8 +142,6 @@ Object {
   "outputPath": undefined,
   "publicPath": "/static",
   "scripts": Array [
-    "bootstrap.no_css.js",
-    "vendor.no_css.js",
     "0.no_css.js",
     "1.no_css.js",
     "main.no_css.js",
@@ -186,8 +180,6 @@ Object {
   "outputPath": undefined,
   "publicPath": "/static",
   "scripts": Array [
-    "bootstrap.no_css.js",
-    "vendor.no_css.js",
     "0.no_css.js",
     "1.no_css.js",
     "2.no_css.js",
