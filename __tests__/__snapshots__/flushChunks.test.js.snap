@@ -13,7 +13,8 @@ Object {
     "toString": [Function],
   },
   "cssHashRaw": Object {
-    "chunk1": "/static/0.css",
+    "chunk1~common1": "/static/0.css",
+    "chunk1~common2": "/static/3.css",
     "chunk2": "/static/1.css",
     "main": "/static/main.css",
   },
@@ -23,9 +24,10 @@ Object {
   "outputPath": undefined,
   "publicPath": "/static",
   "scripts": Array [
-    "bootstrap.no_css.js",
+    "bootstrap~..arbitrary.no_css.js",
     "vendor.no_css.js",
     "0.no_css.js",
+    "3.no_css.js",
     "1.no_css.js",
     "main.no_css.js",
   ],
@@ -35,6 +37,7 @@ Object {
   "stylesheets": Array [
     "main.css",
     "0.css",
+    "3.css",
     "1.css",
   ],
 }
@@ -53,7 +56,8 @@ Object {
     "toString": [Function],
   },
   "cssHashRaw": Object {
-    "chunk1": "/static/0.css",
+    "chunk1~common1": "/static/0.css",
+    "chunk1~common2": "/static/3.css",
     "chunk2": "/static/1.css",
     "main": "/static/main.css",
   },
@@ -63,7 +67,7 @@ Object {
   "outputPath": undefined,
   "publicPath": "/static",
   "scripts": Array [
-    "bootstrap.no_css.js",
+    "bootstrap~..arbitrary.no_css.js",
     "vendor.no_css.js",
     "0.no_css.js",
     "1.no_css.js",
@@ -95,7 +99,8 @@ Object {
     "toString": [Function],
   },
   "cssHashRaw": Object {
-    "chunk1": "/static/0.css",
+    "chunk1~common1": "/static/0.css",
+    "chunk1~common2": "/static/3.css",
     "chunk2": "/static/1.css",
     "main": "/static/main.css",
   },
@@ -136,7 +141,8 @@ Object {
     "toString": [Function],
   },
   "cssHashRaw": Object {
-    "chunk1": "/static/0.css",
+    "chunk1~common1": "/static/0.css",
+    "chunk1~common2": "/static/3.css",
     "chunk2": "/static/1.css",
     "main": "/static/main.css",
   },
@@ -146,9 +152,10 @@ Object {
   "outputPath": undefined,
   "publicPath": "/static",
   "scripts": Array [
-    "bootstrap.no_css.js",
+    "bootstrap~..arbitrary.no_css.js",
     "vendor.no_css.js",
     "0.no_css.js",
+    "3.no_css.js",
     "1.no_css.js",
     "main.no_css.js",
   ],
@@ -158,6 +165,7 @@ Object {
   "stylesheets": Array [
     "main.css",
     "0.css",
+    "3.css",
     "1.css",
   ],
 }
@@ -176,7 +184,8 @@ Object {
     "toString": [Function],
   },
   "cssHashRaw": Object {
-    "chunk1": "/static/0.css",
+    "chunk1~common1": "/static/0.css",
+    "chunk1~common2": "/static/3.css",
     "chunk2": "/static/1.css",
     "main": "/static/main.css",
   },
@@ -186,7 +195,7 @@ Object {
   "outputPath": undefined,
   "publicPath": "/static",
   "scripts": Array [
-    "bootstrap.no_css.js",
+    "bootstrap~..arbitrary.no_css.js",
     "vendor.no_css.js",
     "0.no_css.js",
     "1.no_css.js",
@@ -218,7 +227,8 @@ Object {
     "toString": [Function],
   },
   "cssHashRaw": Object {
-    "chunk1": "/static/0.css",
+    "chunk1~common1": "/static/0.css",
+    "chunk1~common2": "/static/3.css",
     "chunk2": "/static/1.css",
     "main": "/static/main.css",
   },
@@ -254,6 +264,12 @@ Array [
   "0.js.map",
   "0.no_css.js.map",
   "0.css.map",
+  "3.js",
+  "3.no_css.js",
+  "3.css",
+  "3.js.map",
+  "3.no_css.js.map",
+  "3.css.map",
   "1.js",
   "1.no_css.js",
   "1.css",
@@ -289,6 +305,7 @@ Array [
 exports[`flushFiles() called as a pure function filter: by function 1`] = `
 Array [
   "0.css",
+  "3.css",
   "1.css",
 ]
 `;
@@ -296,6 +313,7 @@ Array [
 exports[`flushFiles() called as a pure function filter: by regex 1`] = `
 Array [
   "0.css",
+  "3.css",
   "1.css",
 ]
 `;
@@ -303,6 +321,7 @@ Array [
 exports[`flushFiles() called as a pure function filter: by string (file extension) 1`] = `
 Array [
   "0.css",
+  "3.css",
   "1.css",
 ]
 `;
@@ -315,6 +334,12 @@ Array [
   "0.js.map",
   "0.no_css.js.map",
   "0.css.map",
+  "3.js",
+  "3.no_css.js",
+  "3.css",
+  "3.js.map",
+  "3.no_css.js.map",
+  "3.css.map",
   "1.js",
   "1.no_css.js",
   "1.css",

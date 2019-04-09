@@ -121,7 +121,8 @@ Array [
 
 exports[`unit tests createCssHash() 1`] = `
 Object {
-  "chunk1": "/static/0.css",
+  "chunk1~common1": "/static/0.css",
+  "chunk1~common2": "/static/3.css",
   "chunk2": "/static/1.css",
   "main": "/static/main.css",
 }
