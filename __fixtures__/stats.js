@@ -22,14 +22,43 @@ const chunk3Files = [
   '2.no_css.js.map',
   '2.css.map'
 ]
+const chunk4Files = [
+  '3.js',
+  '3.no_css.js',
+  '3.css',
+  '3.js.map',
+  '3.no_css.js.map',
+  '3.css.map'
+]
 
 export const stats = {
   assetsByChunkName: {
-    bootstrap: ['bootstrap.js', 'bootstrap.no_css.js'],
+    'bootstrap~..arbitrary': [
+      'bootstrap~..arbitrary.js',
+      'bootstrap~..arbitrary.no_css.js'
+    ],
     vendor: ['vendor.js', 'vendor.no_css.js'],
     main: ['main.js', 'main.no_css.js', 'main.css'],
-    chunk1: chunk1Files,
+    'chunk1~common1': chunk1Files,
+    'chunk1~common2': chunk4Files,
     chunk2: chunk2Files
+  },
+  namedChunkGroups: {
+    bootstrap: {
+      chunks: ['bootstrap~..arbitrary']
+    },
+    vendor: {
+      chunks: ['vendor']
+    },
+    main: {
+      chunks: ['main']
+    },
+    chunk1: {
+      chunks: ['chunk1~common1', 'chunk1~common2']
+    },
+    chunk2: {
+      chunks: ['chunk2']
+    }
   },
   chunks: [
     {

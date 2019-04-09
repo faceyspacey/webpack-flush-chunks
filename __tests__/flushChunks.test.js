@@ -9,7 +9,7 @@ import {
   isUnique,
   normalizePath,
   concatFilesAtKeys,
-  filesFromChunks
+  assetsFromChunkGroups
 } from '../src/flushChunks'
 
 import {
@@ -223,13 +223,21 @@ describe('unit tests', () => {
     expect(files).toEqual(['0.js', '0.css', '2.js', '2.css'])
   })
 
-  test('filesFromChunks()', () => {
+  test('assetsFromChunkGroups()', () => {
     const entryNames = ['bootstrap', 'vendor', 'main']
     const assetsByChunkName = {
       bootstrap: ['bootstrap.js'],
       main: ['main.js', 'main.css']
     }
-    const outputFiles = filesFromChunks(entryNames, { assetsByChunkName })
+    const namedChunkGroups = {
+      bootstrap: { chunks: ['bootstrap'] },
+      main: { chunks: ['main'] },
+      vendor: { chunks: ['vendor'] }
+    }
+    const outputFiles = assetsFromChunkGroups(entryNames, {
+      assetsByChunkName,
+      namedChunkGroups
+    })
 
     expect(outputFiles).toEqual(['bootstrap.js', 'main.js', 'main.css'])
   })
