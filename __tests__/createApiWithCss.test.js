@@ -126,4 +126,13 @@ describe('unit tests', () => {
     const hash = createCssHash(stats) /*? $ */
     expect(hash).toMatchSnapshot()
   })
+
+  it('passes additional props through the created component APIs', () => {
+    const files = ['0.js', '0.css', 'main.js', 'main.css']
+    const filesForCss = ['main.js', 'main.css', '0.js', '0.css']
+    const api = createApiWithCss(files, filesForCss, stats, outputPath) /*? $ */
+
+    expect(api.Js({ foo: 'bar' }) /*? $.props.children */).toMatchSnapshot()
+    expect(api.Styles({ foo: 'bar' }) /*? $.props.children */).toMatchSnapshot()
+  })
 })
