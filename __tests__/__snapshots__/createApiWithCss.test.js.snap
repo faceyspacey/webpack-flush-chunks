@@ -127,6 +127,38 @@ Object {
 }
 `;
 
+exports[`unit tests passes additional props through the created component APIs 1`] = `
+<span>
+  <script
+    defer={true}
+    foo="bar"
+    src="/static/0.js"
+    type="text/javascript"
+  />
+  <script
+    defer={true}
+    foo="bar"
+    src="/static/main.js"
+    type="text/javascript"
+  />
+</span>
+`;
+
+exports[`unit tests passes additional props through the created component APIs 2`] = `
+<span>
+  <link
+    foo="bar"
+    href="/static/main.css"
+    rel="stylesheet"
+  />
+  <link
+    foo="bar"
+    href="/static/0.css"
+    rel="stylesheet"
+  />
+</span>
+`;
+
 exports[`unit tests stylesAsString() 1`] = `
 "/Users/jamesgillmore/App/build/main.css- the css! 
 

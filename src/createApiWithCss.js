@@ -48,22 +48,28 @@ export default (
   const api = {
     // 1) Use as React components using ReactDOM.renderToStaticMarkup, eg:
     // <html><Styles /><Js /><html>
-    Js: () => (
+    Js: props => (
       <span>
-        {scripts.map((file, key) => (
+        {scripts.map(file => (
           <script
             type='text/javascript'
             src={`${publicPath}/${file}`}
-            key={key}
+            key={file}
             defer
+            {...props}
           />
         ))}
       </span>
     ),
-    Styles: () => (
+    Styles: props => (
       <span>
-        {stylesheets.map((file, key) => (
-          <link rel='stylesheet' href={`${publicPath}/${file}`} key={key} />
+        {stylesheets.map(file => (
+          <link
+            rel='stylesheet'
+            href={`${publicPath}/${file}`}
+            key={file}
+            {...props}
+          />
         ))}
       </span>
     ),
@@ -91,19 +97,17 @@ export default (
     // Use as a React component (<Css />) or a string (`${css}`):
     // NOTE: during development, HMR requires stylesheets.
     Css: () =>
-      DEV ? (
-        api.Styles()
-      ) : (
-        <span>
+      (DEV
+        ? api.Styles()
+        : <span>
           <style>{stylesAsString(stylesheets, outputPath)}</style>
-        </span>
-      ),
+        </span>),
     css: {
       toString: () =>
         // lazy-loaded in case not used
-        DEV
+        (DEV
           ? api.styles.toString()
-          : `<style>${stylesAsString(stylesheets, outputPath)}</style>`
+          : `<style>${stylesAsString(stylesheets, outputPath)}</style>`)
     },
 
     // 4) names of files without publicPath or outputPath prefixed:
@@ -126,9 +130,7 @@ export default (
     ),
     cssHash: {
       toString: () =>
-        `<script type='text/javascript'>window.__CSS_CHUNKS__= ${JSON.stringify(
-          cssHashRaw
-        )}</script>`
+        `<script type='text/javascript'>window.__CSS_CHUNKS__= ${JSON.stringify(cssHashRaw)}</script>`
     }
   }
 
