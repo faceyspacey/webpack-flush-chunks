@@ -14,6 +14,7 @@ import {
 
 import {
   stats,
+  statsV5,
   rootDir,
   babelFilePaths,
   webpackModuleIds,
@@ -73,6 +74,14 @@ describe('flushChunks() called as pure function', () => {
   it('webpack - chunkNames', () => {
     const files = flushChunks(stats, true, {
       chunkNames
+    }) /*? */
+
+    expect(files).toMatchSnapshot()
+  })
+
+  it('webpack v5 - chunkNames', () => {
+    const files = flushChunks(statsV5, true, {
+      chunkNames: ['routeA']
     }) /*? */
 
     expect(files).toMatchSnapshot()

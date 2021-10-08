@@ -246,14 +246,10 @@ const filesFromChunks = (
 ): Files => {
   const chunksByID = findChunkById(stats)
 
-  const entryToFiles = entry => {
-    if (typeof entry === 'number') {
-      return chunksByID[entry]
-    }
-    return (
-      stats.assetsByChunkName[entry] || stats.assetsByChunkName[`${entry}-`]
-    )
-  }
+  const entryToFiles = entry =>
+    chunksByID[entry] ||
+    stats.assetsByChunkName[entry] ||
+    stats.assetsByChunkName[`${entry}-`]
 
   const chunksWithAssets = chunksToResolve({
     chunkNames,

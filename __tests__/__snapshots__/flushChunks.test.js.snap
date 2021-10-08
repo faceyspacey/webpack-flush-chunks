@@ -163,6 +163,36 @@ Object {
 }
 `;
 
+exports[`flushChunks() called as pure function webpack v5 - chunkNames 1`] = `
+Object {
+  "Css": [Function],
+  "CssHash": [Function],
+  "Js": [Function],
+  "Styles": [Function],
+  "css": Object {
+    "toString": [Function],
+  },
+  "cssHash": Object {
+    "toString": [Function],
+  },
+  "cssHashRaw": Object {},
+  "js": Object {
+    "toString": [Function],
+  },
+  "outputPath": undefined,
+  "publicPath": "auto",
+  "scripts": Array [
+    "vendors-node_modules_react-dom_index_js.js",
+    "routeA.js",
+    "main.js",
+  ],
+  "styles": Object {
+    "toString": [Function],
+  },
+  "stylesheets": Array [],
+}
+`;
+
 exports[`flushChunks() called as pure function webpack: uses default entries when no named chunks provided via opts.before/after 1`] = `
 Object {
   "Css": [Function],
